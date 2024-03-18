@@ -9,8 +9,8 @@ from users.models import User, Buyer
 class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    price = models.IntegerField()
-    count = models.IntegerField(default=0)
+    price = models.PositiveIntegerField()
+    count = models.PositiveIntegerField(default=0)
     category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products')
     shop = models.ForeignKey('Shop', on_delete=models.PROTECT, related_name='products')
     time_created = models.DateTimeField(auto_now_add=True)
@@ -45,7 +45,7 @@ class Shop(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, related_name='shop', null=True)
     name = models.CharField(max_length=63, db_index=True)
     email = models.EmailField(blank=True, unique=True, null=True)
-    phone = models.BigIntegerField(blank=True, unique=True, null=True)
+    phone = models.CharField(blank=True, null=True, unique=True)
 
     def __str__(self):
         return self.name

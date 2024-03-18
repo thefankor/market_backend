@@ -119,7 +119,7 @@ def cart_decr(request, cart_id):
 
 def cart_decr_in_index(request, product_id):
     cart = Cart.objects.get(product_id=product_id, user=request.user.buyer)
-    if cart.count != 0:
+    if cart.count != 1:
         cart.count -= 1
         cart.save()
     else:
