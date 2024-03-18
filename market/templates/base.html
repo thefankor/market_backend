@@ -1,0 +1,42 @@
+{% load static %}
+{% load get_cart %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CHIPI-CHIPI</title>
+    <link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
+</head>
+<body>
+    <div>
+    <h2><a href="{% url 'home' %}">CHIPI-CHIPI</a></h2>
+    {% if user.is_authenticated %}
+        {% if user.is_buyer %}
+        <p>Profile: <a href="{% url 'users:profile' %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>
+        {% elif user.is_shop %}
+        <p>Shop: <a href="{% url 'shop' seller_id=user.shop.id %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>
+        {% endif %}
+    {% else %}
+        <p><a href="{% url 'users:login' %}">login</a> <a href="{% url 'users:register' %}">register</a></p>
+    {% endif %}
+
+        {% if user.is_buyer %}
+        {% get_cart filter=user.pk as cart %}
+            {% if cart|add:0 > 0 %}
+                 <a href="{% url 'cart' %}"><p>Cart: {{ cart }}</p></a>
+            {% else %}
+        <a href="{% url 'cart' %}"><p>Cart: 0</p></a>
+            {% endif %}
+        {% else %}
+        <p>Cart: empty</p>
+        {% endif %}
+
+
+    </div>
+    <hr><hr>
+    {% block content %} {% endblock %}
+
+</body>
+</html>

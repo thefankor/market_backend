@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ product.title }}</h1>
+    <p>{{ product.price }}₽</p>
+    {% if product.count == 0 %}
+    <hr><p>Нет в наличии</p><hr>
+    {% endif %}
+    <p>{{ product.description|linebreaks }}</p>
+    <p>shop: <a href="{{ product.shop.get_absolute_url }}">{{ product.shop.name }}</a> </p>
+
+    {% if user.shop.id == product.shop.id %}
+        <p><a href="{% url 'edit_product' product_id=product.id %}">(edit)</a></p>
+        {% endif %}
+{% endblock %}
