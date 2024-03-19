@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
 from .forms import AddProdForm
-from .models import Product, Category, Shop, Cart
+from .models import Product, Category, Shop, Cart, Favorite
 from django.db.models import Avg, Count, Q, Sum, Min
 
 
@@ -14,12 +14,14 @@ from django.db.models import Avg, Count, Q, Sum, Min
 def index(request):
     # products = Product.objects.filter(is_published=1)
     if request.user.is_authenticated and request.user.is_buyer:
+        fav_prod = Product.objects.filter(favorite__user=request.user.buyer)
         products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
             count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
 
     else:
+        fav_prod = []
         products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
-    return render(request, 'chipi/index_with_score.html', context={"prod": products})
+    return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
 
 
 def catg(request, cat_id):
@@ -143,5 +145,35 @@ def show_cart(request):
     else:
         return redirect('users:login')
 
+
+def add_fav(request, product_id):
+    product = Product.objects.get(id=product_id)
+    if len(Favorite.objects.filter(user=request.user.buyer, product_id=product_id)) == 0:
+        Favorite.objects.create(user=request.user.buyer, product=product)
+    # request.user.buyer.favorite.add(product_id)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+def rem_fav(request, product_id):
+
+    fav = Favorite.objects.get(user=request.user.buyer, product=product_id)
+
+    fav.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+
+def show_favorites(request):
+    if request.user.is_buyer:
+        favs = Product.objects.filter(favorite__user=request.user.buyer).annotate(
+            mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
+            count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+        return render(request, 'chipi/favorites.html', context={"prod": favs})
+    elif request.user.is_shop:
+        return HttpResponseNotFound('<h1>Список желаний не доступен в режиме магазина</h1>')
+    else:
+        return redirect('users:login')

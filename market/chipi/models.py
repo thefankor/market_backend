@@ -20,8 +20,8 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product', kwargs={'product_id': self.pk})
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
     class Meta:
         ordering = ["pk"]
@@ -83,3 +83,12 @@ class Cart(models.Model):
 
     def sum(self):
         return self.count * self.product.price
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='favorite')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='favorite')
+    time_created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-time_created"]

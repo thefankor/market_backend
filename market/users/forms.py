@@ -14,7 +14,7 @@ from users.models import Buyer
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Password', widget=forms.PasswordInput())
-    is_buyer = forms.BooleanField(initial=True)
+    # is_buyer = forms.BooleanField(initial=True)
 
     class Meta:
         model = get_user_model()
