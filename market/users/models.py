@@ -17,7 +17,22 @@ class Buyer(models.Model):
     phone = models.CharField(blank=True, null=True, unique=True)
     sex = models.BooleanField(blank=True, null=True)
     age = models.IntegerField(blank=True, null=True)
+    correct_address = models.ForeignKey('Address', on_delete=models.CASCADE, related_name='buyer', blank=True, null=True)
 
     def __str__(self):
         return self.user.username
+
+
+class Address(models.Model):
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='address')
+    first_name = models.CharField(max_length=63)
+    middle_name = models.CharField(max_length=63)
+    last_name = models.CharField(max_length=63)
+    email = models.EmailField()
+    phone = models.CharField()
+    country = models.CharField()
+    region = models.CharField()
+    city = models.CharField()
+    index = models.CharField()
+    addr = models.CharField()
 

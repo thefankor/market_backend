@@ -92,3 +92,5 @@ class Favorite(models.Model):
 
     class Meta:
         ordering = ["-time_created"]
+
+

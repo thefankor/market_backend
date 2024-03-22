@@ -15,4 +15,5 @@ urlpatterns = [
          name='password_change_done'),
     path('shop-register/', views.RegisterShop.as_view(), name='shop_register'),
     path('edit_shop/', views.edit_shop, name='edit_shop'),
+    path('address/', views.address, name='address')
 ]

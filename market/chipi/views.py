@@ -130,19 +130,22 @@ def cart_decr_in_index(request, product_id):
 
 
 def show_cart(request):
-    if request.user.is_buyer:
-        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
-        total_count = sum(cart.count for cart in carts)
-        total_sum = sum(cart.sum() for cart in carts)
-        data = {
-            'products': carts,
-            'total_count': total_count,
-            'total_sum': total_sum,
-        }
-        return render(request, 'chipi/cart.html', context=data)
-    elif request.user.is_shop:
-        return HttpResponseNotFound('<h1>Корзина не доступна в режиме магазина</h1>')
-    else:
+    try:
+        if request.user.is_buyer:
+            carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+            total_count = sum(cart.count for cart in carts)
+            total_sum = sum(cart.sum() for cart in carts)
+            data = {
+                'products': carts,
+                'total_count': total_count,
+                'total_sum': total_sum,
+            }
+            return render(request, 'chipi/cart.html', context=data)
+        elif request.user.is_shop:
+            return HttpResponseNotFound('<h1>Корзина не доступна в режиме магазина</h1>')
+        else:
+            return redirect('users:login')
+    except:
         return redirect('users:login')
 
 
@@ -177,3 +180,4 @@ def show_favorites(request):
         return HttpResponseNotFound('<h1>Список желаний не доступен в режиме магазина</h1>')
     else:
         return redirect('users:login')
+

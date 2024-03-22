@@ -8,9 +8,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from users.forms import LoginUserForm, RegisterUserForm, ProfileUserForm, UserPasswordChangeForm, RegisterShopForm, \
-    ProfileUser2Form, ProfileShopForm
+    ProfileUser2Form, ProfileShopForm, AddressForm
 
 from django.contrib.auth.decorators import login_required
+
+from users.models import Address
 
 
 # from django.contrib.auth import login as auth_login
@@ -150,3 +152,45 @@ class RegisterShop(CreateView):
     form_class = RegisterShopForm
     template_name = 'users/shop_register.html'
     success_url = reverse_lazy('home')
+
+
+def address(request):
+    user = request.user
+    if not user.is_authenticated:
+        return redirect(reverse_lazy('users:login'))
+    if not user.is_buyer:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+    indata = {
+        'phone': user.buyer.phone,
+        'email': user.buyer.email,
+        'last_name': user.buyer.last_name,
+        'first_name': user.buyer.first_name,
+        'middle_name': user.buyer.middle_name,
+    }
+    if user.buyer.correct_address:
+        form = AddressForm(instance=user.buyer.correct_address)
+    else:
+        form = AddressForm(initial=indata)
+    # form2 = ProfileShopForm(instance=user.shop)
+
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        # form2 = ProfileShopForm(request.POST, instance=user.shop)
+        if form.is_valid():
+            try:
+                if not user.buyer.correct_address:
+                    a = Address.objects.create(**form.cleaned_data, user=user.buyer)
+                    u = user.buyer
+                    u.correct_address = a
+                    u.save()
+                else:
+                    adr = user.buyer.correct_address.id
+                    Address.objects.filter(pk=adr).update(**form.cleaned_data)
+                return redirect('users:address')
+            except:
+                form.add_error(None, 'Ошибка добавления хз')
+            # u = user.buyer
+            # u.correct_address
+            # form2.save()
+            return redirect(reverse_lazy('users:address'))
+    return render(request, 'users/address.html', {'form': form})

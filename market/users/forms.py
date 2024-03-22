@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from chipi.models import Shop
-from users.models import Buyer
+from users.models import Buyer, Address
 
 
 # from .models import Product, Category, Shop
@@ -93,7 +93,7 @@ class ProfileUserForm(forms.ModelForm):
         return email
 
 class ProfileUser2Form(forms.ModelForm):
-    phone = forms.CharField(disabled=True)
+    # phone = forms.CharField(disabled=True)
     user = forms.IntegerField(disabled=True)
     class Meta:
         model = Buyer
@@ -206,3 +206,12 @@ class ProfileShopForm(forms.ModelForm):
             'name': 'Название магазина',
             'id': 'ShopID',
         }
+
+
+class AddressForm(forms.ModelForm):
+    # id = forms.IntegerField()
+    phone = forms.CharField()
+
+    class Meta:
+        model = Address
+        fields = ['phone', 'email', 'last_name', 'first_name', 'middle_name', 'country', 'region', 'city', 'index', 'addr']
