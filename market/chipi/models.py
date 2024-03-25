@@ -94,3 +94,24 @@ class Favorite(models.Model):
         ordering = ["-time_created"]
 
 
+class Order(models.Model):
+    '''+ address'''
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name='orders', null=True)
+    amount = models.PositiveIntegerField()
+    price = models.PositiveBigIntegerField()
+    time_created = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(default=0)
+    title = models.CharField(max_length=255)
+    track = models.CharField(blank=True)
+
+    first_name = models.CharField(max_length=63)
+    middle_name = models.CharField(max_length=63)
+    last_name = models.CharField(max_length=63)
+    email = models.EmailField()
+    phone = models.CharField()
+    country = models.CharField()
+    region = models.CharField()
+    city = models.CharField()
+    index = models.CharField()
+    addr = models.CharField()
