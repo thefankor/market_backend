@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
+from users.forms import AddressForm
+from users.models import Address
 from .forms import AddProdForm
 from .models import Product, Category, Shop, Cart, Favorite
 from django.db.models import Avg, Count, Q, Sum, Min
@@ -14,6 +16,14 @@ from django.db.models import Avg, Count, Q, Sum, Min
 def index(request):
     # products = Product.objects.filter(is_published=1)
     if request.user.is_authenticated and request.user.is_buyer:
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        for cart in carts:
+            if cart.product.count == 0:
+                cart.delete()
+            elif cart.count > cart.product.count:
+                cart.count = cart.product.count
+                cart.save()
+
         fav_prod = Product.objects.filter(favorite__user=request.user.buyer)
         products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
             count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
@@ -21,7 +31,8 @@ def index(request):
     else:
         fav_prod = []
         products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
-    return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
+    # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
+    return render(request, 'chipi/index2.html', context={"prod": products, "fav_prod": fav_prod})
 
 
 def catg(request, cat_id):
@@ -102,10 +113,37 @@ def cart_add(request, product_id):
         Cart.objects.create(user=request.user.buyer, product=product, count=1)
     else:
         cart = carts.first()
-        cart.count += 1
+        if int(product.count) > int(cart.count):
+            cart.count += 1
         cart.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+def cart_add_ajax(request):
+    product_id = request.POST.get("product_id")
+    product = Product.objects.get(id=product_id)
+    carts = Cart.objects.filter(user=request.user.buyer, product=product)
+    if not carts.exists():
+        Cart.objects.create(user=request.user.buyer, product=product, count=1)
+        if int(product.count) <= 2:
+            response_data = {'status': 'success', 'product_id': product.id, 'last': True, 'max': True}
+        else:
+            response_data = {'status': 'success', 'product_id': product.id, 'last': False, 'max': True}
+    else:
+        cart = carts.first()
+        if int(product.count) <= int(cart.count) + 1:
+            response_data = {'status': 'success', 'product_id': product.id, 'last': True, 'max': True}
+        else:
+            response_data = {'status': 'success', 'product_id': product.id, 'last': False, 'max': True}
+        if int(product.count) > int(cart.count):
+            cart.count += 1
+            response_data['max'] = False
+
+        cart.save()
+
+    # response_data = {'status': 'success', 'product_id': product.id, 'aaa': 'bbb'}
+    return JsonResponse(response_data)
+    # return render('home')
 
 def cart_delete(request, cart_id):
     cart = Cart.objects.get(id=cart_id)
@@ -128,11 +166,34 @@ def cart_decr_in_index(request, product_id):
         cart.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+def cart_decr_in_index_ajax(request):
+    product_id = request.POST.get("product_id")
+    cart = Cart.objects.get(product_id=product_id, user=request.user.buyer)
+    if cart.count != 1:
+        cart.count -= 1
+        cart.save()
+    else:
+        cart.delete()
+    response_data = {'status': 'success', 'aaa': 'bbb'}
+    return JsonResponse(response_data)
+
 
 def show_cart(request):
     try:
         if request.user.is_buyer:
             carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+            new_cart = []
+            for cart in carts:
+                if cart.product.count == 0:
+                    cart.delete()
+                elif cart.count > cart.product.count:
+                    cart.count = cart.product.count
+                    cart.save()
+                    new_cart.append(cart)
+                else:
+                    new_cart.append(cart)
+
+            carts = new_cart
             total_count = sum(cart.count for cart in carts)
             total_sum = sum(cart.sum() for cart in carts)
             data = {
@@ -147,6 +208,62 @@ def show_cart(request):
             return redirect('users:login')
     except:
         return redirect('users:login')
+
+
+def create_order(request):
+    try:
+        if request.user.is_buyer:
+            user = request.user
+            indata = {
+                'phone': user.buyer.phone,
+                'email': user.buyer.email,
+                'last_name': user.buyer.last_name,
+                'first_name': user.buyer.first_name,
+                'middle_name': user.buyer.middle_name,
+            }
+            if user.buyer.correct_address:
+                form = AddressForm(instance=user.buyer.correct_address)
+            else:
+                form = AddressForm(initial=indata)
+            if request.method == 'POST':
+                form = AddressForm(request.POST)
+                if form.is_valid():
+                    try:
+                        if not user.buyer.correct_address:
+                            a = Address.objects.create(**form.cleaned_data, user=user.buyer)
+                            u = user.buyer
+                            u.correct_address = a
+                            u.save()
+                        else:
+                            adr = user.buyer.correct_address.id
+                            Address.objects.filter(pk=adr).update(**form.cleaned_data)
+                        return redirect('create_order')
+                    except:
+                        form.add_error(None, 'Ошибка добавления хз')
+                    return redirect(reverse_lazy('order'))
+
+            carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+            if len(carts) == 0:
+                return redirect('home')
+            else:
+                total_count = sum(cart.count for cart in carts)
+                total_sum = sum(cart.sum() for cart in carts)
+                data = {
+                    'products': carts,
+                    'total_count': total_count,
+                    'total_sum': total_sum,
+                    'form': form,
+                }
+                return render(request, 'chipi/create_order.html', context=data)
+        elif request.user.is_shop:
+            return HttpResponseNotFound('<h1>Оформление заказа недоступно в режиме магазина</h1>')
+        else:
+            return redirect('users:login')
+    except:
+        return redirect('users:login')
+
+
+
 
 
 def add_fav(request, product_id):

@@ -33,6 +33,6 @@
     {% endfor %}
     <hr>
     <h2>Total amount: {{ total_sum }}₽</h2>
-    <button>Оформить заказ</button>
+    <a href="{% url 'create_order' %}"><button>Оформить заказ</button></a>
 <br><br><br><br><br>
 {% endblock %}

@@ -171,11 +171,9 @@ def address(request):
         form = AddressForm(instance=user.buyer.correct_address)
     else:
         form = AddressForm(initial=indata)
-    # form2 = ProfileShopForm(instance=user.shop)
 
     if request.method == 'POST':
         form = AddressForm(request.POST)
-        # form2 = ProfileShopForm(request.POST, instance=user.shop)
         if form.is_valid():
             try:
                 if not user.buyer.correct_address:
@@ -189,8 +187,6 @@ def address(request):
                 return redirect('users:address')
             except:
                 form.add_error(None, 'Ошибка добавления хз')
-            # u = user.buyer
-            # u.correct_address
-            # form2.save()
+
             return redirect(reverse_lazy('users:address'))
     return render(request, 'users/address.html', {'form': form})
