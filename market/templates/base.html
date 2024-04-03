@@ -27,12 +27,13 @@
             {% if cart|add:0 > 0 %}
                  <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">{{ cart }}</span></p></a>
             {% else %}
-        <a href="{% url 'cart' %}"><p>Cart: 0</p></a>
+        <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">0</span></p></a>
             {% endif %}
         {% else %}
         <p>Cart: empty</p>
         {% endif %}
         <a href="{% url 'favorites' %}">Favorites</a>
+        <a href="{% url 'orders' %}">Orders</a>
 
 
 

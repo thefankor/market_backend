@@ -215,3 +215,49 @@ class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = ['phone', 'email', 'last_name', 'first_name', 'middle_name', 'country', 'region', 'city', 'index', 'addr']
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        # if get_user_model().objects.filter(email=email).exists():
+        if (( len(phone) != 12 and phone[0] != '8' and phone[0] != '7' ) or (len(phone) != 11 and phone[:2] != '+7')):
+            raise forms.ValidationError('Введите кореектный RU номер телефона в формате +79995554433!')
+        if phone[0] == '7':
+            phone_new = phone
+        elif phone[0] == '8':
+            phone_new = '7' + phone[1:]
+        else:
+            phone_new = phone[1:]
+        return phone_new
+
+    def clean_first_name(self):
+        name = self.cleaned_data['first_name']
+        if 0<len(name)<2:
+            raise forms.ValidationError('Имя должно состоять минимум из двух букв')
+        for sym in name.lower():
+            if sym not in 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyz':
+                raise forms.ValidationError('Имя может содержать только латинские или русские буквы!')
+        return name
+
+    def clean_middle_name(self):
+        name = self.cleaned_data['middle_name']
+        if 0<len(name)<2:
+            raise forms.ValidationError('Отчество должно состоять минимум из двух букв')
+        for sym in name.lower():
+            if sym not in 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyz':
+                raise forms.ValidationError('Отчество может содержать только латинские или русские буквы!')
+        return name
+
+    def clean_last_name(self):
+        name = self.cleaned_data['last_name']
+        if 0<len(name)<2:
+            raise forms.ValidationError('Фамилия должна состоять минимум из двух букв')
+        for sym in name.lower():
+            if sym not in 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyz':
+                raise forms.ValidationError('Фамилия может содержать только латинские или русские буквы!')
+        return name
+
+
+class PaymentTestForm(forms.Form):
+    card_num = forms.CharField()
+    card_date = forms.CharField()
+    card_cvv = forms.CharField()

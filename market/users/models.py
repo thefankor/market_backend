@@ -26,7 +26,7 @@ class Buyer(models.Model):
 class Address(models.Model):
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='address')
     first_name = models.CharField(max_length=63)
-    middle_name = models.CharField(max_length=63)
+    middle_name = models.CharField(max_length=63, blank=True)
     last_name = models.CharField(max_length=63)
     email = models.EmailField()
     phone = models.CharField()

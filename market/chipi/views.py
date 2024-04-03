@@ -3,10 +3,10 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 
-from users.forms import AddressForm
+from users.forms import AddressForm, PaymentTestForm
 from users.models import Address
 from .forms import AddProdForm
-from .models import Product, Category, Shop, Cart, Favorite
+from .models import Product, Category, Shop, Cart, Favorite, Order
 from django.db.models import Avg, Count, Q, Sum, Min
 
 
@@ -240,7 +240,7 @@ def create_order(request):
                         return redirect('create_order')
                     except:
                         form.add_error(None, 'Ошибка добавления хз')
-                    return redirect(reverse_lazy('order'))
+                    # return redirect(reverse_lazy('order'))
 
             carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
             if len(carts) == 0:
@@ -263,7 +263,65 @@ def create_order(request):
         return redirect('users:login')
 
 
+def pay_order(request):
+    # try:
+    if request.user.is_buyer:
+        user = request.user
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        address = user.buyer.correct_address
+        if not user.buyer.correct_address:
+            return redirect('users:address')
+        form = PaymentTestForm()
+        if request.method == 'POST':
+            form = PaymentTestForm(request.POST)
+            if form.is_valid():
+                try:
+                    for c in carts:
+                        if c.count > c.product.count:
+                            form.add_error(None, 'Количество доступных товаров изменилось')
+                            return redirect(reverse_lazy('pay_order'))
+                    for cart in carts:
+                        cart.product.count = cart.product.count - cart.count
+                        cart.product.save()
+                        Order.objects.create(user=user.buyer, product=cart.product, shop=cart.product.shop,
+                                             count=cart.count,
+                                             price=cart.product.price,
+                                             title=cart.product.title,
+                                             first_name=address.first_name,
+                                             middle_name=address.middle_name,
+                                             last_name=address.last_name,
+                                             email=address.email,
+                                             phone=address.phone,
+                                             country=address.country,
+                                             region=address.region,
+                                             city=address.city,
+                                             index=address.index,
+                                             addr=address.addr)
+                        cart.delete()
 
+                    return redirect('orders')
+                except:
+                    form.add_error(None, 'Ошибка оплаты хз')
+                # return redirect(reverse_lazy('order'))
+
+
+        if len(carts) == 0:
+            return redirect('home')
+        else:
+            total_count = sum(cart.count for cart in carts)
+            total_sum = sum(cart.sum() for cart in carts)
+            data = {
+                'total_count': total_count,
+                'total_sum': total_sum,
+                'form': form,
+            }
+            return render(request, 'chipi/pay_order.html', context=data)
+    elif request.user.is_shop:
+        return HttpResponseNotFound('<h1>Оформление заказа недоступно в режиме магазина</h1>')
+    else:
+        return redirect('users:login')
+    # except:
+    #     return redirect('users:login')
 
 
 def add_fav(request, product_id):
@@ -298,3 +356,28 @@ def show_favorites(request):
     else:
         return redirect('users:login')
 
+
+def show_orders(request):
+    user = request.user
+    if not user.is_authenticated:
+        return redirect(reverse_lazy('users:login'))
+    if not user.is_buyer:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+
+    orders = Order.objects.filter(user=request.user.buyer).order_by('-time_created')
+
+    return render(request, 'chipi/orders.html', context={"orders":orders})
+
+
+
+def show_orders_for_shop(request):
+    user = request.user
+    if not user.is_authenticated:
+        return redirect(reverse_lazy('users:login'))
+    if not user.is_shop:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    orders = Order.objects.filter(shop=request.user.shop).order_by('-time_created')
+
+    return render(request, 'chipi/orders_shop.html', context={"orders":orders})

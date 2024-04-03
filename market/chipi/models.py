@@ -97,8 +97,9 @@ class Favorite(models.Model):
 class Order(models.Model):
     '''+ address'''
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
+    shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, related_name='orders', null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name='orders', null=True)
-    amount = models.PositiveIntegerField()
+    count = models.PositiveIntegerField()
     price = models.PositiveBigIntegerField()
     time_created = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(default=0)
