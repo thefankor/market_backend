@@ -1,5 +1,6 @@
 from django import forms
-from .models import Product, Category, Shop
+from .models import Product, Category, Shop, ProductImage
+
 
 # class AddProdForm(forms.Form):
 #     title = forms.CharField(max_length=255, label='Название')
@@ -15,13 +16,14 @@ from .models import Product, Category, Shop
 class AddProdForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'price', 'count', 'description', 'category',]
+        fields = ['title', 'price', 'count', 'description', 'category', 'logo_image']
         labels = {
             'title': 'Название',
             'price': 'Цена',
             'count': 'Количество в наличии',
             'description': 'Описание',
             'category': 'Категория',
+            'logo_image': 'Аватарка',
         }
 
     def clean_price(self):
@@ -41,3 +43,10 @@ class AddProdForm(forms.ModelForm):
         if len(title) < 3:
             raise forms.ValidationError('Слишком короткое название')
         return title
+
+
+class ImageForm(forms.ModelForm):
+    image = forms.ImageField(label='Image')
+    class Meta:
+        model = ProductImage
+        fields = ('image', )

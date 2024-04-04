@@ -1,12 +1,15 @@
+import os
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.forms import modelformset_factory
 
 from users.forms import AddressForm, PaymentTestForm
 from users.models import Address
-from .forms import AddProdForm
-from .models import Product, Category, Shop, Cart, Favorite, Order
+from .forms import AddProdForm, ImageForm
+from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage
 from django.db.models import Avg, Count, Q, Sum, Min
 
 
@@ -42,9 +45,11 @@ def catg(request, cat_id):
 def show_product(request, product_id):
     # return HttpResponse(f"PRODUCT {product_id}")
     product = get_object_or_404(Product, pk=product_id)
+    photos = ProductImage.objects.filter(product=product)
     data = {
         'title': product.title,
         'product': product,
+        'photos': photos,
     }
     return render(request, 'chipi/product.html', context=data)
 
@@ -62,48 +67,7 @@ def show_shop(request, seller_id):
 
 # @login_required
 
-def addprod(request):
-    user = request.user
-    if not user.is_shop:
-        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
-    if request.method == 'POST':
-        form = AddProdForm(request.POST)
-        if form.is_valid():
-            # print(form.cleaned_data)
-            try:
-                Product.objects.create(**form.cleaned_data, shop=user.shop)
-                return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добавления хз')
-
-    else:
-        form = AddProdForm()
-    return render(request, 'chipi/addprod.html', {'form': form})
-
-
-
-def edit_product(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    # data = {
-    #     'title': product.title,
-    #     'product': product,
-    # }
-
-    user = request.user
-    if not user.is_shop:
-        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
-    if user.shop != product.shop:
-        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
-
-    form = AddProdForm(instance=product)
-
-    if request.method == 'POST':
-        form = AddProdForm(request.POST, instance=product)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse_lazy('product', kwargs={'product_id': product.id}))
-    return render(request, 'chipi/edit_product.html', {'form': form,})
 
 
 def cart_add(request, product_id):
@@ -370,7 +334,6 @@ def show_orders(request):
     return render(request, 'chipi/orders.html', context={"orders":orders})
 
 
-
 def show_orders_for_shop(request):
     user = request.user
     if not user.is_authenticated:
@@ -381,3 +344,70 @@ def show_orders_for_shop(request):
     orders = Order.objects.filter(shop=request.user.shop).order_by('-time_created')
 
     return render(request, 'chipi/orders_shop.html', context={"orders":orders})
+
+
+def addprod(request):
+    user = request.user
+
+    if not user.is_shop:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    if request.method == 'POST':
+        form = AddProdForm(request.POST, request.FILES)
+
+
+        if form.is_valid():
+            # print(form.cleaned_data)
+            try:
+                prod = Product.objects.create(**form.cleaned_data, shop=user.shop)
+                files = request.FILES.getlist('files')
+
+                for f in files:
+                    a = ProductImage(product=prod, image=f)
+                    a.save()
+                return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления хз')
+
+    else:
+        form = AddProdForm()
+
+    return render(request, 'chipi/addprod.html', {'form': form,})
+
+
+
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    photos = ProductImage.objects.filter(product=product)
+
+    # data = {
+    #     'title': product.title,
+    #     'product': product,
+    # }
+
+    user = request.user
+    if not user.is_shop:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+    if user.shop != product.shop:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    form = AddProdForm(instance=product)
+
+    if request.method == 'POST':
+        form = AddProdForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+
+            form.save()
+            files = request.FILES.getlist('files')
+            if len(files) > 0:
+                prim = ProductImage.objects.filter(product=product)
+                for pr in prim:
+                    if os.path.isfile(pr.image.path):
+                        os.remove(pr.image.path)
+                    pr.delete()
+            for f in files:
+                a = ProductImage(product=product, image=f)
+                a.save()
+            return redirect(reverse_lazy('edit_product', kwargs={'product_id': product.id}))
+    return render(request, 'chipi/edit_product.html', {'form': form, 'product': product,
+                                                       'photos': photos})

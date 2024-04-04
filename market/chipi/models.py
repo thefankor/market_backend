@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.urls import reverse
 from users.models import User, Buyer
@@ -16,15 +18,32 @@ class Product(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
+    logo_image = models.ImageField(upload_to='logos/')
 
     def get_absolute_url(self):
         return reverse('product', kwargs={'product_id': self.pk})
+
+    def save(self, *args, **kwargs):
+        try:
+            this = Product.objects.get(id=self.id)
+            if this.logo_image != self.logo_image:
+                if os.path.isfile(this.logo_image.path):
+                    os.remove(this.logo_image.path)
+        except:
+            pass
+
+        super(Product, self).save(*args, **kwargs)
 
     # def __str__(self):
     #     return self.title
 
     class Meta:
         ordering = ["pk"]
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='photos/')
 
 
 class Category(models.Model):

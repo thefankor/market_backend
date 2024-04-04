@@ -17,6 +17,7 @@
         <p>Profile: <a href="{% url 'users:profile' %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>
         {% elif user.is_shop %}
         <p>Shop: <a href="{% url 'shop' seller_id=user.shop.id %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>
+        <p><a href="{% url 'addprod' %}">Add product</a></p>
         {% endif %}
     {% else %}
         <p><a href="{% url 'users:login' %}">login</a> <a href="{% url 'users:register' %}">register</a></p>

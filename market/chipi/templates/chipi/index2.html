@@ -3,6 +3,9 @@
 {% block content %}
 
     {% for p in prod %}
+        {% if p.logo_image %}
+        <img src="{{ p.logo_image.url }}" width="100" height="100">
+        {% endif %}
     {% if p.count == 0 %}
         <p><b><s>{{ p.title }}</s></b></p>
     {% else %}
