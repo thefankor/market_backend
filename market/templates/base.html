@@ -16,7 +16,7 @@
         <form action="" method="get">
             <div class="header-line2">
                 <img class="header-line1-img1" src="{% static 'chipi/images/Union.png' %}" alt="Не отобразилось">
-                <a  href="index-head.html" class="header-line1-p1">Chipi-Chipi</a>
+                <a  href="{% url 'home' %}" class="header-line1-p1">Chipi-Chipi</a>
                 <input class='header-line1-input' type="text" placeholder="Поиск по сайту..." name="header-line1-poisk">
                 <button class='header-line1-btn1' type="submit">
                     <img class="header-line1-img2" src="{% static 'chipi/images/search_magnifier_icon_145939.png' %}" alt="Лупа">
