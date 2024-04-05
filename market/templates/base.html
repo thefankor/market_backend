@@ -1,45 +1,101 @@
 {% load static %}
 {% load get_cart %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CHIPI-CHIPI</title>
-    <link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chipi-Chipi</title>
 </head>
 <body>
-    <div>
-    <h2><a href="{% url 'home' %}">CHIPI-CHIPI</a></h2>
-    {% if user.is_authenticated %}
-        {% if user.is_buyer %}
-        <p>Profile: <a href="{% url 'users:profile' %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>
-        {% elif user.is_shop %}
-        <p>Shop: <a href="{% url 'shop' seller_id=user.shop.id %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>
-        <p><a href="{% url 'addprod' %}">Add product</a></p>
-        {% endif %}
-    {% else %}
-        <p><a href="{% url 'users:login' %}">login</a> <a href="{% url 'users:register' %}">register</a></p>
-    {% endif %}
+<!--    <link rel="stylesheet" href="style-head.css">-->
+<link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
+    <div class="header">
+        </div>
+        <form action="" method="get">
+            <div class="header-line2">
+                <img class="header-line1-img1" src="{% static 'chipi/images/Union.png' %}" alt="Не отобразилось">
+                <a  href="index-head.html" class="header-line1-p1">Chipi-Chipi</a>
+                <input class='header-line1-input' type="text" placeholder="Поиск по сайту..." name="header-line1-poisk">
+                <button class='header-line1-btn1' type="submit">
+                    <img class="header-line1-img2" src="{% static 'chipi/images/search_magnifier_icon_145939.png' %}" alt="Лупа">
+                </button>
+                <a href="#">
+                    <img class = 'header-line1-img3' src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="image">
+                </a>
+                <a href="#">
+                    <img class='header-line1-img4' src="{% static 'chipi/images/Heart.png' %}" alt="image">
+                </a>
+                <a href="index-account-vhod.html">
+                    <img class="header-line1-img5" src="{% static 'chipi/images/User.png' %}" alt="imagr">
+                </a>
+            </div>
+        </form>
+        <div class="header-line3">
+            <select class='header-line3-select' name="category">
+                <option class="header-line3-option" value="1">Все категории</option>
+                <option class="header-line3-option" value="2">Электроника</option>
+                <option class="header-line3-option" value="3">Одежда</option>
+                <option class="header-line3-option" value="4">Бытовая техника</option>
+                <option class="header-line3-option" value="5">Дом и сад</option>
+                <option class="header-line3-option" value="6">Аптека</option>
+                <option class="header-line3-option" value="7">Товары для животных</option>
+                <option class="header-line3-option" value="8">Аксессуары</option>
+                <option class="header-line3-option" value="9">Автотовары</option>
+                <option class="header-line3-option" value="10">Мебель</option>
+                <option class="header-line3-option" value="11">Красота и здоровье</option>
+                <option class="header-line3-option" value="12">Продукты</option>
+            </select>
+            <img class='header-line3-img1' src="{% static 'chipi/images/MapPinLine.png' %}" alt="image">
+            <a class="header-line3-a1" href="index-zakaz.html">Отследить заказ</a>
+            <img class='header-line3-img2' src="{% static 'chipi/imagesVector1.png' %}" alt="image">
+            <a class="header-line3-a2" href="index-podderzhka.html">Поддержка</a>
+            <img class='header-line3-img3' src="{% static 'chipi/images/Info.png' %}" alt="image">
+            <a class="header-line3-a3" href="#">Нужна помощь</a>
+            <img class='header-line3-img4' src="{% static 'chipi/images/PhoneCall.png' %}" alt="image">
+            <a class="header-line3-a4" href="#">Номера нет</a>
+        </div>
 
-        {% if user.is_buyer %}
-        {% get_cart filter=user.pk as cart %}
-            {% if cart|add:0 > 0 %}
-                 <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">{{ cart }}</span></p></a>
-            {% else %}
-        <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">0</span></p></a>
-            {% endif %}
-        {% else %}
-        <p>Cart: empty</p>
-        {% endif %}
-        <a href="{% url 'favorites' %}">Favorites</a>
-        <a href="{% url 'orders' %}">Orders</a>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>CHIPI-CHIPI</title>-->
+<!--    <link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div>-->
+<!--    <h2><a href="{% url 'home' %}">CHIPI-CHIPI</a></h2>-->
+<!--    {% if user.is_authenticated %}-->
+<!--        {% if user.is_buyer %}-->
+<!--        <p>Profile: <a href="{% url 'users:profile' %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>-->
+<!--        {% elif user.is_shop %}-->
+<!--        <p>Shop: <a href="{% url 'shop' seller_id=user.shop.id %}">{{ user.username }}</a> | <a href="{% url 'users:logout' %}">logout</a></p>-->
+<!--        <p><a href="{% url 'addprod' %}">Add product</a></p>-->
+<!--        {% endif %}-->
+<!--    {% else %}-->
+<!--        <p><a href="{% url 'users:login' %}">login</a> <a href="{% url 'users:register' %}">register</a></p>-->
+<!--    {% endif %}-->
+
+<!--        {% if user.is_buyer %}-->
+<!--        {% get_cart filter=user.pk as cart %}-->
+<!--            {% if cart|add:0 > 0 %}-->
+<!--                 <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">{{ cart }}</span></p></a>-->
+<!--            {% else %}-->
+<!--        <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">0</span></p></a>-->
+<!--            {% endif %}-->
+<!--        {% else %}-->
+<!--        <p>Cart: empty</p>-->
+<!--        {% endif %}-->
+<!--        <a href="{% url 'favorites' %}">Favorites</a>-->
+<!--        <a href="{% url 'orders' %}">Orders</a>-->
 
 
 
-    </div>
-    <hr><hr>
+<!--    </div>-->
+<!--    <hr><hr>-->
     {% block content %} {% endblock %}
 
     <script src="{% static 'chipi/js/jquery/jquery-3.7.1.min.js' %}"></script>
