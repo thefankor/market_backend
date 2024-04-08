@@ -1,6 +1,7 @@
 {% load static %}
 {% load get_cart %}
-
+{% load mptt_tags %}
+{% load chipi_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,6 +36,20 @@
         {% endif %}
         <a href="{% url 'favorites' %}">Favorites</a>
         <a href="{% url 'orders' %}">Orders</a>
+        <p>{% get_category as ctg %}</p>
+        <ul class="root">
+<!--            {{ ctg }}-->
+    {% recursetree ctg %}
+        <li>
+            {{ node.name }}
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
 
 
 

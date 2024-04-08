@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'chipi.apps.ChipiConfig',
     'debug_toolbar',
     'users.apps.UsersConfig',
-]
+    'mptt'
+,]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

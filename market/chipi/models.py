@@ -2,6 +2,9 @@ import os
 
 from django.db import models
 from django.urls import reverse
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
+
 from users.models import User, Buyer
 
 
@@ -14,6 +17,7 @@ class Product(models.Model):
     price = models.PositiveIntegerField()
     count = models.PositiveIntegerField(default=0)
     category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products')
+    prodcategory = models.ForeignKey('ProdCategory', on_delete=models.PROTECT, related_name='products', null=True)
     shop = models.ForeignKey('Shop', on_delete=models.PROTECT, related_name='products')
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)
@@ -44,6 +48,27 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='photos/')
+
+
+class ProdCategory(MPTTModel):
+    name = models.CharField(max_length=50, unique=True, verbose_name='Название')
+    parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, related_name='children',
+                            db_index=True, verbose_name='Родительская категория')
+    slug = models.SlugField(max_length=63, unique=True, db_index=True)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        unique_together = [['parent', 'slug']]
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+    # def get_absolute_url(self):
+    #     return reverse('post-by-category', args=[str(self.slug)])
+
+    def __str__(self):
+        return self.name
 
 
 class Category(models.Model):
