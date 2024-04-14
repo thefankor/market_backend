@@ -9,7 +9,7 @@ from django.forms import modelformset_factory
 from users.forms import AddressForm, PaymentTestForm
 from users.models import Address
 from .forms import AddProdForm, ImageForm
-from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage
+from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage, ProdCategory
 from django.db.models import Avg, Count, Q, Sum, Min
 
 
@@ -55,9 +55,35 @@ def show_product(request, product_id):
 
 
 def show_category(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    products = Product.objects.filter(category_id=category.pk)
-    return render(request, 'chipi/index.html', context={"prod": products})
+    category = get_object_or_404(ProdCategory, slug=category_slug)
+    ctg = category
+    children_categories = ctg.get_descendants(include_self=True)
+    path = [ctg, ]
+    while ctg.parent:
+        ctg = ctg.parent
+        path = [ctg, ] + path
+
+
+    if request.user.is_authenticated and request.user.is_buyer:
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        for cart in carts:
+            if cart.product.count == 0:
+                cart.delete()
+            elif cart.count > cart.product.count:
+                cart.count = cart.product.count
+                cart.save()
+
+        fav_prod = Product.objects.filter(favorite__user=request.user.buyer, prodcategory_id=category.pk)
+        products = Product.objects.filter(prodcategory__in=children_categories).annotate(
+            mark=Avg('reviews__score'),
+            count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer))
+        ).order_by('id').select_related('shop')
+
+    else:
+        fav_prod = []
+        products = Product.objects.filter(prodcategory__in=children_categories).annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
+    # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
+    return render(request, 'chipi/cats.html', context={"prod": products, "fav_prod": fav_prod, "path": path})
 
 
 def show_shop(request, seller_id):

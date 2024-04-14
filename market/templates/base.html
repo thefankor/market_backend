@@ -41,7 +41,7 @@
 <!--            {{ ctg }}-->
     {% recursetree ctg %}
         <li>
-            {{ node.name }}
+            <a href="{% url 'category' category_slug=node.slug %}">{{ node.name }}</a>
             {% if not node.is_leaf_node %}
                 <ul class="children">
                     {{ children }}
