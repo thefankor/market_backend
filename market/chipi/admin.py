@@ -10,9 +10,12 @@ class CategoryAdmin(MPTTModelAdmin):
 
 admin.site.register(ProdCategory, CategoryAdmin)
 
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('title', 'prodcategory', 'shop')
+    search_fields = ['title', 'prodcategory__name']
 
-
-admin.site.register(Product)
+# admin.site.register(Product)
 admin.site.register(Category)
 admin.site.register(Shop)
 admin.site.register(Review)

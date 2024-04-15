@@ -36,6 +36,13 @@
         {% endif %}
         <a href="{% url 'favorites' %}">Favorites</a>
         <a href="{% url 'orders' %}">Orders</a>
+        <form action="{% url 'search' %}" method="get">
+            <input class="search" type="text" name="q" placeholder="Search.." value="{{ search_text }}">
+        </form>
+
+
+
+
         <p>{% get_category as ctg %}</p>
         <ul class="root">
 <!--            {{ ctg }}-->

@@ -18,13 +18,6 @@
     });
     </script>
 <hr>
-
-    <p>
-        {% for pr in path %}
-        <a href="{% url 'category' category_slug=pr.slug %}?s={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
-            {{ pr.name }}</a>/
-        {% endfor %}
-    </p>
     {% for p in prod %}
         {% if p.logo_image %}
         <img src="{{ p.logo_image.url }}" width="100" height="100">
