@@ -8,8 +8,8 @@ from django.forms import modelformset_factory
 
 from users.forms import AddressForm, PaymentTestForm
 from users.models import Address
-from .forms import AddProdForm, ImageForm
-from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage
+from .forms import AddProdForm, ImageForm, ReviewForm
+from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage, ProdCategory, Review
 from django.db.models import Avg, Count, Q, Sum, Min
 
 
@@ -17,6 +17,8 @@ from django.db.models import Avg, Count, Q, Sum, Min
 
 
 def index(request):
+    search_query = request.GET.get('q')
+
     # products = Product.objects.filter(is_published=1)
     if request.user.is_authenticated and request.user.is_buyer:
         carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
@@ -28,21 +30,29 @@ def index(request):
                 cart.save()
 
         fav_prod = Product.objects.filter(favorite__user=request.user.buyer)
-        products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
-            count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+        if search_query == None:
+            products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+        else:
+
+            products = Product.objects.filter(title__icontains=search_query).annotate(mark=Avg('reviews__score')).order_by('id').select_related(
+                'shop').annotate(
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+
 
     else:
         fav_prod = []
         products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
     # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
-    return render(request, 'chipi/index2.html', context={"prod": products, "fav_prod": fav_prod})
+    return render(request, 'chipi/index2.html', context={"prod": products, "fav_prod": fav_prod,
+                                                         'search_text': search_query or ''})
 
 
 def catg(request, cat_id):
     return render(request, 'chipi/cats.html', context={'cat_id': cat_id, })
 
 
-def show_product(request, product_id):
+def show_product_old(request, product_id):
     # return HttpResponse(f"PRODUCT {product_id}")
     product = get_object_or_404(Product, pk=product_id)
     photos = ProductImage.objects.filter(product=product)
@@ -54,11 +64,39 @@ def show_product(request, product_id):
     return render(request, 'chipi/product.html', context=data)
 
 
-def show_category(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    products = Product.objects.filter(category_id=category.pk)
-    return render(request, 'chipi/index.html', context={"prod": products})
+def show_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    photos = ProductImage.objects.filter(product=product)
+    reviews = Review.objects.filter(product_id=product_id)
 
+
+    user = request.user
+
+    # if not user.is_shop:
+    #     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            # print(form.cleaned_data)
+            try:
+                prod = Review.objects.create(**form.cleaned_data, user=user.buyer, product=product)
+
+                # return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления хз')
+
+    else:
+        form = ReviewForm()
+    data = {
+        'title': product.title,
+        'product': product,
+        'photos': photos,
+        'form': form,
+        'reviews': reviews,
+    }
+    return render(request, 'chipi/product.html', context=data)
 
 def show_shop(request, seller_id):
     shop = get_object_or_404(Shop, pk=seller_id)
@@ -411,3 +449,116 @@ def edit_product(request, product_id):
             return redirect(reverse_lazy('edit_product', kwargs={'product_id': product.id}))
     return render(request, 'chipi/edit_product.html', {'form': form, 'product': product,
                                                        'photos': photos})
+
+
+def search(request):
+    search_query = request.GET.get('q')
+    min_pr = request.GET.get('min_price')
+    max_pr = request.GET.get('max_price')
+    ctgs = ProdCategory.objects.filter(parent=None)
+    # products = Product.objects.filter(is_published=1)
+    if request.user.is_authenticated and request.user.is_buyer:
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        for cart in carts:
+            if cart.product.count == 0:
+                cart.delete()
+            elif cart.count > cart.product.count:
+                cart.count = cart.product.count
+                cart.save()
+
+        fav_prod = Product.objects.filter(favorite__user=request.user.buyer)
+        if search_query == None:
+            products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+        else:
+
+            products = Product.objects.filter(title__icontains=search_query, price__gte=min_pr or 0, price__lte=max_pr or 10**9
+                ).annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop').annotate(
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+
+
+    else:
+        fav_prod = []
+        if search_query == None:
+            products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
+        else:
+            products = Product.objects.filter(title__icontains=search_query, price__gte=min_pr or 0, price__lte=max_pr or 10**9
+                ).annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
+    datacon = {
+                "prod": products,
+                "fav_prod": fav_prod,
+                "search_text": search_query or '',
+                "min_pr": min_pr or '',
+                "max_pr": max_pr or '',
+                "ctgs": ctgs
+               }
+    # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
+    return render(request, 'chipi/search.html', context=datacon)
+
+
+
+def show_category(request, category_slug):
+    category = get_object_or_404(ProdCategory, slug=category_slug)
+    ctg = category
+    children_categories = ctg.get_descendants(include_self=True)
+    path = [ctg, ]
+    search_query = request.GET.get('q')
+    min_pr = request.GET.get('min_price')
+    max_pr = request.GET.get('max_price')
+    next_ctgs = ProdCategory.objects.filter(parent=category)
+    while ctg.parent:
+        ctg = ctg.parent
+        path = [ctg, ] + path
+
+
+    if request.user.is_authenticated and request.user.is_buyer:
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        for cart in carts:
+            if cart.product.count == 0:
+                cart.delete()
+            elif cart.count > cart.product.count:
+                cart.count = cart.product.count
+                cart.save()
+
+        fav_prod = Product.objects.filter(favorite__user=request.user.buyer, prodcategory_id=category.pk)
+        if search_query == None:
+            products = Product.objects.filter(prodcategory__in=children_categories).annotate(
+            mark=Avg('reviews__score'),
+            count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer))
+            ).order_by('id').select_related('shop')
+        else:
+
+            products = Product.objects.filter(prodcategory__in=children_categories,
+                title__icontains = search_query, price__gte = min_pr or 0, price__lte = max_pr or 10 ** 9).annotate(
+                mark=Avg('reviews__score'),
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer))
+            ).order_by('id').select_related('shop')
+    else:
+        fav_prod = []
+        if search_query == None:
+            products = Product.objects.filter(prodcategory__in=children_categories).annotate(
+                mark=Avg('reviews__score')).order_by('id').select_related('shop')
+        else:
+            products = Product.objects.filter(prodcategory__in=children_categories,
+                                              title__icontains=search_query, price__gte=min_pr or 0,
+                                              price__lte=max_pr or 10 ** 9).annotate(
+                mark=Avg('reviews__score')).order_by('id').select_related('shop')
+
+    # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
+    datacon = {
+        "search_text": search_query or '',
+        "min_pr": min_pr or '',
+        "max_pr": max_pr or '',
+        "ctgs": next_ctgs,
+        "prod": products,
+        "fav_prod": fav_prod,
+        "path": path
+    }
+    return render(request, 'chipi/cats.html', context=datacon)
+
+
+def rem_review(request, rev_id):
+    user = request.user.buyer
+    review = Review.objects.get(id=rev_id, user=user)
+    review.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

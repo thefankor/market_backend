@@ -19,3 +19,9 @@ def get_cart(filter=None):
         return Cart.objects.filter(user=buyer).aggregate(total_count=Sum('count'))['total_count'] or 0
         # return Cart.objects.filter(user=buyer).count()
     return 0
+
+
+@register.simple_tag
+def get_category():
+    cat = ProdCategory.objects.all()
+    return cat

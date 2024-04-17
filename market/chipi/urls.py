@@ -26,5 +26,7 @@ urlpatterns = [
     path('orders/', views.show_orders, name='orders'),
     path('orders_shop/', views.show_orders_for_shop, name='orders_shop'),
     path('', views.index, name='home'),
+    path('s/', views.search, name='search'),
+    path('rem_review/<int:rev_id>/', views.rem_review, name='rem_review'),
 
 ]

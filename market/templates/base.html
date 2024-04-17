@@ -1,6 +1,10 @@
 {% load static %}
 {% load get_cart %}
 
+{% load mptt_tags %}
+{% load chipi_tags %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,25 +17,26 @@
 <link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
     <div class="header">
         </div>
-        <form action="" method="get">
             <div class="header-line2">
                 <img class="header-line1-img1" src="{% static 'chipi/images/Union.png' %}" alt="Не отобразилось">
                 <a  href="{% url 'home' %}" class="header-line1-p1">Chipi-Chipi</a>
-                <input class='header-line1-input' type="text" placeholder="Поиск по сайту..." name="header-line1-poisk">
+                        <form action="{% url 'search' %}" method="get">
+            <input class='header-line1-input' class="search" type="text" name="q" placeholder="Поиск по сайту..." value="{{ search_text }}">
+        </form>
+<!--                <input  type="text" " name="header-line1-poisk">-->
                 <button class='header-line1-btn1' type="submit">
                     <img class="header-line1-img2" src="{% static 'chipi/images/search_magnifier_icon_145939.png' %}" alt="Лупа">
                 </button>
-                <a href="#">
+                <a href="{% url 'cart' %}">
                     <img class = 'header-line1-img3' src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="image">
                 </a>
-                <a href="#">
+                <a href="{% url 'favorites' %}">
                     <img class='header-line1-img4' src="{% static 'chipi/images/Heart.png' %}" alt="image">
                 </a>
-                <a href="index-account-vhod.html">
+                <a href="{% url 'users:profile' %}">
                     <img class="header-line1-img5" src="{% static 'chipi/images/User.png' %}" alt="imagr">
                 </a>
             </div>
-        </form>
         <div class="header-line3">
             <select class='header-line3-select' name="category">
                 <option class="header-line3-option" value="1">Все категории</option>
@@ -56,6 +61,7 @@
             <img class='header-line3-img4' src="{% static 'chipi/images/PhoneCall.png' %}" alt="image">
             <a class="header-line3-a4" href="#">Номера нет</a>
         </div>
+
 
 
 <!--<!DOCTYPE html>-->
@@ -91,6 +97,41 @@
 <!--        {% endif %}-->
 <!--        <a href="{% url 'favorites' %}">Favorites</a>-->
 <!--        <a href="{% url 'orders' %}">Orders</a>-->
+<!--=======-->
+<!--        {% if user.is_buyer %}-->
+<!--        {% get_cart filter=user.pk as cart %}-->
+<!--            {% if cart|add:0 > 0 %}-->
+<!--                 <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">{{ cart }}</span></p></a>-->
+<!--            {% else %}-->
+<!--        <a href="{% url 'cart' %}"><p>Cart: <span id="prod-cart-count">0</span></p></a>-->
+<!--            {% endif %}-->
+<!--        {% else %}-->
+<!--        <p>Cart: empty</p>-->
+<!--        {% endif %}-->
+<!--        <a href="{% url 'favorites' %}">Favorites</a>-->
+<!--        <a href="{% url 'orders' %}">Orders</a>-->
+<!--        <form action="{% url 'search' %}" method="get">-->
+<!--            <input class="search" type="text" name="q" placeholder="Search.." value="{{ search_text }}">-->
+<!--        </form>-->
+
+
+
+
+<!--        <p>{% get_category as ctg %}</p>-->
+<!--        <ul class="root">-->
+<!--&lt;!&ndash;            {{ ctg }}&ndash;&gt;-->
+<!--    {% recursetree ctg %}-->
+<!--        <li>-->
+<!--            <a href="{% url 'category' category_slug=node.slug %}">{{ node.name }}</a>-->
+<!--            {% if not node.is_leaf_node %}-->
+<!--                <ul class="children">-->
+<!--                    {{ children }}-->
+<!--                </ul>-->
+<!--            {% endif %}-->
+<!--        </li>-->
+<!--    {% endrecursetree %}-->
+<!--</ul>-->
+<!--&gt;>>>>>> temp_branch-->
 
 
 
