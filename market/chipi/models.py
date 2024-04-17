@@ -102,20 +102,13 @@ class Shop(models.Model):
 
 
 class Review(models.Model):
-    '''
-    FEEDBACKS
-    - Id
-    - Text
-    - user_id
-    - product_id
-    - Created
-    - Rate
-    '''
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='reviews')
-    from_user = models.IntegerField(null=True, blank=True)
+    # from_user = models.IntegerField(null=True, blank=True)
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='reviews')
     text = models.TextField(blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
-    score = models.IntegerField()
+    score = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='reviews/', blank=True)
 
 
 class Cart(models.Model):

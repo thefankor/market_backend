@@ -8,8 +8,8 @@ from django.forms import modelformset_factory
 
 from users.forms import AddressForm, PaymentTestForm
 from users.models import Address
-from .forms import AddProdForm, ImageForm
-from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage, ProdCategory
+from .forms import AddProdForm, ImageForm, ReviewForm
+from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage, ProdCategory, Review
 from django.db.models import Avg, Count, Q, Sum, Min
 
 
@@ -52,7 +52,7 @@ def catg(request, cat_id):
     return render(request, 'chipi/cats.html', context={'cat_id': cat_id, })
 
 
-def show_product(request, product_id):
+def show_product_old(request, product_id):
     # return HttpResponse(f"PRODUCT {product_id}")
     product = get_object_or_404(Product, pk=product_id)
     photos = ProductImage.objects.filter(product=product)
@@ -64,7 +64,39 @@ def show_product(request, product_id):
     return render(request, 'chipi/product.html', context=data)
 
 
+def show_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    photos = ProductImage.objects.filter(product=product)
+    reviews = Review.objects.filter(product_id=product_id)
 
+
+    user = request.user
+
+    # if not user.is_shop:
+    #     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            # print(form.cleaned_data)
+            try:
+                prod = Review.objects.create(**form.cleaned_data, user=user.buyer, product=product)
+
+                # return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления хз')
+
+    else:
+        form = ReviewForm()
+    data = {
+        'title': product.title,
+        'product': product,
+        'photos': photos,
+        'form': form,
+        'reviews': reviews,
+    }
+    return render(request, 'chipi/product.html', context=data)
 
 def show_shop(request, seller_id):
     shop = get_object_or_404(Shop, pk=seller_id)
@@ -523,3 +555,10 @@ def show_category(request, category_slug):
         "path": path
     }
     return render(request, 'chipi/cats.html', context=datacon)
+
+
+def rem_review(request, rev_id):
+    user = request.user.buyer
+    review = Review.objects.get(id=rev_id, user=user)
+    review.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
