@@ -68,24 +68,30 @@ def show_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     photos = ProductImage.objects.filter(product=product)
     reviews = Review.objects.filter(product_id=product_id)
-
-
+    if request.user.is_buyer:
+        corrent_r = Review.objects.filter(product=product, user=request.user.buyer)
+        prod_bought = Order.objects.filter(product=product, user=request.user.buyer)
+        if len(prod_bought) == 0:
+            is_bought = False
+        else:
+            is_bought = True
+    else:
+        corrent_r = []
+        is_bought = False
     user = request.user
 
-    # if not user.is_shop:
-    #     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
-
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = ReviewForm(request.POST, request.FILES)
+        if is_bought and len(corrent_r) == 0:
+            if form.is_valid():
+                # print(form.cleaned_data)
+                try:
+                    prod = Review.objects.create(**form.cleaned_data, user=user.buyer, product=product)
+                    corrent_r = [prod]
 
-        if form.is_valid():
-            # print(form.cleaned_data)
-            try:
-                prod = Review.objects.create(**form.cleaned_data, user=user.buyer, product=product)
-
-                # return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добавления хз')
+                    # return redirect('home')
+                except:
+                    form.add_error(None, 'Ошибка добавления хз')
 
     else:
         form = ReviewForm()
@@ -95,6 +101,8 @@ def show_product(request, product_id):
         'photos': photos,
         'form': form,
         'reviews': reviews,
+        'is_bought': is_bought,
+        'rev_count': len(corrent_r),
     }
     return render(request, 'chipi/product.html', context=data)
 

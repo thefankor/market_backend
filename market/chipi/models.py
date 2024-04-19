@@ -16,7 +16,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.PositiveIntegerField()
     count = models.PositiveIntegerField(default=0)
-    category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products')
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products', blank=True)
     prodcategory = models.ForeignKey('ProdCategory', on_delete=models.PROTECT, related_name='products', null=True)
     shop = models.ForeignKey('Shop', on_delete=models.PROTECT, related_name='products')
     time_created = models.DateTimeField(auto_now_add=True)

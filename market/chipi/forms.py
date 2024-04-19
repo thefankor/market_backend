@@ -16,13 +16,13 @@ from .models import Product, Category, Shop, ProductImage, Review
 class AddProdForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'price', 'count', 'description', 'category', 'logo_image']
+        fields = ['title', 'price', 'count', 'description', 'prodcategory', 'logo_image', 'category']
         labels = {
             'title': 'Название',
             'price': 'Цена',
             'count': 'Количество в наличии',
             'description': 'Описание',
-            'category': 'Категория',
+            'prodcategory': 'Категория',
             'logo_image': 'Аватарка',
         }
 
@@ -61,3 +61,9 @@ class ReviewForm(forms.ModelForm):
             'score': 'Оценка',
             'image': 'Изображение',
         }
+
+    def clean_score(self):
+        score = self.cleaned_data['score']
+        if score not in [1,2,3,4,5]:
+            raise forms.ValidationError('Оценка должна быть от 1 до 5')
+        return score

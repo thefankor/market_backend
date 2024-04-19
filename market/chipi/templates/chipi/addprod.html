@@ -8,10 +8,6 @@
             <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
             <div class="form-error">{{ f.errors }}</div>
         {% endfor %}
-<!--        {{ formset.management_form }}-->
-<!--            {% for form in formset %}-->
-<!--                {{ form }}-->
-<!--            {% endfor %}-->
         <input type="file" name = "files" multiple accept="image/*" />
         <p><button type="submit">SEND</button></p>
     </form>
