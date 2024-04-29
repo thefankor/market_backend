@@ -132,6 +132,13 @@ class Favorite(models.Model):
 
 
 class Order(models.Model):
+    class Status(models.IntegerChoices):
+        CREATED = 0, 'Создан'
+        PAID_FOR = 1, 'Оплачен'
+        ASSEMBLING = 2, 'В сборке'
+        TRANSIT = 3, 'В пути'
+        WAITING = 4, 'Ожидает выдачи'
+        DELIVERED = 5, 'Доставлен'
     '''+ address'''
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
     shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, related_name='orders', null=True)
@@ -139,12 +146,12 @@ class Order(models.Model):
     count = models.PositiveIntegerField()
     price = models.PositiveBigIntegerField()
     time_created = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(choices=Status.choices, default=Status.CREATED)
     title = models.CharField(max_length=255)
     track = models.CharField(blank=True)
 
     first_name = models.CharField(max_length=63)
-    middle_name = models.CharField(max_length=63)
+    middle_name = models.CharField(max_length=63, blank=True)
     last_name = models.CharField(max_length=63)
     email = models.EmailField()
     phone = models.CharField()

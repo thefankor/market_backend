@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Category, Shop, ProductImage, Review
+from .models import Product, Category, Shop, ProductImage, Review, Order
 
 
 # class AddProdForm(forms.Form):
@@ -67,3 +67,13 @@ class ReviewForm(forms.ModelForm):
         if score not in [1,2,3,4,5]:
             raise forms.ValidationError('Оценка должна быть от 1 до 5')
         return score
+
+
+class EditOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['status', 'track']
+        labels = {
+            'status': 'Статус',
+            'track': 'Трек-номер',
+        }

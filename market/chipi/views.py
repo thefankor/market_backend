@@ -8,7 +8,7 @@ from django.forms import modelformset_factory
 
 from users.forms import AddressForm, PaymentTestForm
 from users.models import Address
-from .forms import AddProdForm, ImageForm, ReviewForm
+from .forms import AddProdForm, ImageForm, ReviewForm, EditOrderForm
 from .models import Product, Category, Shop, Cart, Favorite, Order, ProductImage, ProdCategory, Review
 from django.db.models import Avg, Count, Q, Sum, Min
 
@@ -70,7 +70,7 @@ def show_product(request, product_id):
     reviews = Review.objects.filter(product_id=product_id)
     if request.user.is_buyer:
         corrent_r = Review.objects.filter(product=product, user=request.user.buyer)
-        prod_bought = Order.objects.filter(product=product, user=request.user.buyer)
+        prod_bought = Order.objects.filter(product=product, user=request.user.buyer, status=Order.Status.DELIVERED)
         if len(prod_bought) == 0:
             is_bought = False
         else:
@@ -570,3 +570,23 @@ def rem_review(request, rev_id):
     review = Review.objects.get(id=rev_id, user=user)
     review.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def edit_order(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+
+    user = request.user
+    if not user.is_shop:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+    if user.shop != order.shop:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    form = EditOrderForm(instance=order)
+
+    if request.method == 'POST':
+        form = EditOrderForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse_lazy('edit_order', kwargs={'order_id': order_id}))
+
+    return render(request, 'chipi/edit_order.html', {'form': form, 'order': order})

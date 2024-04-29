@@ -92,12 +92,20 @@ WSGI_APPLICATION = 'market.wsgi.application'
 #     }
 # }
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "market_db",
+    #     "USER": "postgres",
+    #     "PASSWORD": "1234",
+    #     "HOST": "localhost",
+    #     "PORT": "5432",
+    # }
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "market_db",
-        "USER": "postgres",
-        "PASSWORD": "1234",
-        "HOST": "localhost",
+        "NAME": "chapa",
+        "USER": "chipi",
+        "PASSWORD": "1Mq3Z(?-C2Jm",
+        "HOST": "193.200.74.71",
         "PORT": "5432",
     }
 }
