@@ -15,17 +15,25 @@
             <p><img src="{{ ph.image.url }}" width="100" height="100"></p>
     {% endfor %}
     <hr>
+    {% if reviews %}
     {% for r in reviews %}
-    {{ r.user.first_name }}
-    {{ r.score }}☆
-    {{ r.text }}
-    {% if user.buyer == r.user %}
-    <a href="{% url 'rem_review' rev_id=r.id %}"><button>Delete nahui</button></a>
-    {% endif %}
-<hr>
+        {{ r.user.first_name }}
+        {{ r.score }}☆
+        {{ r.text }}
+        {% if user.buyer == r.user %}
+        {% if r.image %}
+        <p><img src="{{ r.image.url }}" width="100" height="100"></p>
+        {% endif %}
+        <a href="{% url 'rem_review' rev_id=r.id %}"><button>Delete nahui</button></a>
+        {% endif %}
+        <hr>
     {% endfor %}
+    {% else %}
+    <p>Отзывов пока нет</p>
+    {% endif %}
     <hr>
-
+    {% if is_bought and rev_count == 0 %}
+    <h2>Оставить отзыв</h2>
      <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-error">{{ form.non_field_errors }}</div>
@@ -35,6 +43,7 @@
         {% endfor %}
         <p><button type="submit">SEND</button></p>
     </form>
+    {% endif %}
 
     {% if user.shop.id == product.shop.id %}
         <p><a href="{% url 'edit_product' product_id=product.id %}">(edit)</a></p>
