@@ -1,15 +1,65 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Регистрация</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-         <input type="hidden" name="next" value="{{ next }}">
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">SEND</button></p>
-    </form>
+<link rel="stylesheet" href="{% static 'chipi/css/style-account-registration.css' %}">
+<form action="" method="get">
+	<div class="account">
+		<div class="account-a">
+			<a href="{% url 'users:login' %}">
+				<p class="account-a1">Войти</p>
+			</a>
+			<a href="{% url 'users:register' %}">
+				<p class="account-a2">Регистрация</p>
+			</a>
+		</div>
+		<div class="poloski">
+			<div class="poloska2"></div>
+			<div class="poloska1"></div>
+		</div>
+		<div class="account-p">
+			<p class="account-p1">Имя</p>
+			<input class="account-p-input" type="text" name="username">
+		</div>
+		<div class="account-p">
+			<p class="account-p1">Email адрес</p>
+			<input class="account-p-input" type="email" name="email">
+		</div>
+		<div class="parol">
+			<div class="parol-p">
+				<p class="parol-p1">Пароль</p>
+			</div>
+			<input class='parol-password' placeholder="Минимум 8 символов" type="password" name="password1">
+		</div>
+		<div class="parol">
+			<div class="parol-p">
+				<p class="parol-p1">Подтвердите пароль</p>
+			</div>
+			<input class='parol-password' type="password" name="password2">
+		</div>
+		<div class="politika">
+			<input class="politika-input" type="checkbox" name="politika" required>
+			<p class="politika-p">Согласны ли вы с <a class="politika-a" href="#">Условиями использования</a> и <a
+					class="politika-a" href="#">Политикой конфиденциальности?</a></p>
+		</div>
+		<div class="account-btn">
+			<button class="account-btn1" type="submit">
+				<img src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+			</button>
+		</div>
+		<div class="pusto">
+			<div class="pusto1"></div>
+			<p class="pusto2">или</p>
+			<div class="pusto3"></div>
+		</div>
+		<a href="">
+			<div class="google">
+				<img class="google-img" src="{% static 'chipi/images/Google.svg' %}" alt="">
+				<p class="google-p">Sign up with Google</p>
+			</div>
+		</a>
+	</div>
+	{% csrf_token %}
+	<input type="hidden" name="next" value="{{ next }}">
+</form>
 {% endblock %}

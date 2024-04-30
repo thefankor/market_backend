@@ -68,7 +68,7 @@ def show_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     photos = ProductImage.objects.filter(product=product)
     reviews = Review.objects.filter(product_id=product_id)
-    if request.user.is_buyer:
+    if request.user.is_authenticated and request.user.is_buyer:
         corrent_r = Review.objects.filter(product=product, user=request.user.buyer)
         prod_bought = Order.objects.filter(product=product, user=request.user.buyer, status=Order.Status.DELIVERED)
         if len(prod_bought) == 0:
