@@ -1,46 +1,65 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'chipi/css/style-favorite.css' %}">
 
-    {% for p in prod %}
-    <p><b>{{ p.title|upper }}</b></p>
-        {% if p.mark %}
-        <p>☆{{ p.mark|floatformat:1 }}</p>
-        {% else %}
-        <p>☆ 0.0</p>
-        {% endif %}
-    <p>{{ p.price }}₽</p>
-    <a href="{{ p.get_absolute_url }}">click</a>
-    {% if user.is_buyer %}
-
-    <ul>{% if p.count_in_cart %}
-
-
-        <a href="{% url 'cart_decr_in_index' product_id=p.id %}"><button>-</button></a>
-
-        {{ p.count_in_cart }}
-        <a href="{% url 'cart_add' product_id=p.id %}"><button>+</button></a>
-
-        {% else %}
-            <a href="{% url 'cart_add' product_id=p.id %}">
-            <button>Добавить в корзину&#128465</button>
-            </a>
-        {% endif %}
-
-
-        <a style="color: red; text-decoration: none; font-size: 25px" href="{% url 'rem_fav' product_id=p.id %}">
-            ♥
-            </a>
+    {% if user.is_buyer and prod %}
 
 
 
-    </ul>
 
+<div>
+        <link rel="stylesheet" href="style-favorite.css">
+
+                <div class="container">
+                    <h2>Список желаемого</h2>
+                    <table>
+                        <tr>
+                            <th width="300px">Товар</th>
+                            <th width="80px">Цена</th>
+                            <th width="80px">Actions</th>
+                        </tr>
+                        {% for p in prod %}
+                        <tr>
+                            <td>
+                                <div class="bottom1-line1">
+                                    <img src="{{ p.logo_image.url }}" alt="{{ p.title }}" width="72px" height="72px" aria-colcount="#475156">
+                                    <p>{{ p.title }}</p>
+                                </div>
+                            </td>
+                            <td >{{ p.price }} ₽</td>
+                            <td class="actions">
+                                {% if p.count_in_cart %}
+                                <a href="{% url 'cart_decr_in_index' product_id=p.id %}"><button>-</button></a>
+                                {{ p.count_in_cart }}
+                                <a href="{% url 'cart_add' product_id=p.id %}"><button>+</button></a>
+                                {% else %}
+                                    <a href="{% url 'cart_add' product_id=p.id %}">
+                                    <button>В корзину</button>
+                                    </a>
+                                {% endif %}
+
+                                <a href="{% url 'rem_fav' product_id=p.id %}"><button1 class="actions button1">
+                                    <img src="{% static 'chipi/images/del.png' %}" width="24px" height="24px">
+                                </button1></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                    </table>
+            </div>
+        </div>
+    {% else %}
+        <div>
+        <link rel="stylesheet" href="style-favorite.css">
+
+                <div class="container">
+                    <h2>Список желаемого пуст</h2>
+
+            </div>
+        </div>
     {% endif %}
 
-    <p>shop:<a href="{{ p.shop.get_absolute_url }}">{{ p.shop.name }}</a> </p>
-    {% if not forloop.last %}
-    <hr>
-    {% endif %}
-    {% endfor %}
 {% endblock %}

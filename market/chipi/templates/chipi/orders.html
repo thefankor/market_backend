@@ -3,7 +3,11 @@
 {% block content %}
     <h1>ORDERS</h1>
     {% for order in orders %}
-    <p>{{ order.title }}</p>
+        {% if order.product.logo_image %}
+        <p><img src="{{ order.product.logo_image.url }}" width="100" height="100"></p>
+        {% endif %}
+<!--    <p>{{ order.title }}{{ order.product.id }}</p>-->
+    <p><a href="{{ order.product.get_absolute_url }}">{{ order.title }}</a></p>
     <p>{{ order.count }} x {{ order.price }} RUB</p>
 <!--    {% if order.status == 0 %}-->
 <!--    <p>Status: оплачен</p>-->
@@ -11,7 +15,7 @@
 <!--    <p>hui</p>-->
 <!--    <p>Status: {{ order.status }}</p>-->
 <!--    {% endif %}-->
-        <p>{{ order.get_status_display }}</p>
+        <p>Статус: <b>{{ order.get_status_display }}</b></p>
 <hr>
     {% endfor %}
 
