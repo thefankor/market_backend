@@ -1,15 +1,138 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<h1>Address</h1>
-  <form action="" method="post">
-        {% csrf_token %}
-         <input type="hidden" name="next" value="{{ next }}">
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">Save</button></p>
-    </form>
+<link rel="stylesheet" href="{% static 'chipi/css/profile.css' %}">
+
+<div class="first-line">
+
+        <div class="panel">
+
+            <div class="panel-1">
+                <img class="panel-1-img" src="{% static 'chipi/images/Notebook1.svg' %}" alt="7">
+                <a href="{% url 'users:address' %}"><p class="panel-1-p">Карты и адреса</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Stack1.svg' %}" alt="1">
+                <a href="{% url 'users:profile' %}"><p class="panel-2-p">Аккаунт</p></a>
+            </div>
+
+
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Storefront1.svg' %}" alt="2">
+                <a href="{% url 'orders' %}"><p class="panel-2-p">История заказов</p></a>
+            </div>
+<!--            <div class="panel-2">-->
+<!--                <img class="panel-2-img" src="{% static 'chipi/images/MapPinLine1.svg' %}" alt="3">-->
+<!--                <a href="index-zakaz.html"><p class="panel-2-p">Отследить заказ</p></a>-->
+<!--            </div>-->
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/ShoppingCartSimple1.svg' %}" alt="4">
+                <a href="{% url 'cart' %}"><p class="panel-2-p">Корзина</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Heart1.svg' %}" alt="5">
+                <a href="{% url 'favorites' %}"><p class="panel-2-p">Список желаний</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/ArrowsCounterClockwise1.svg' %}" alt="6">
+                <a href="{% url 'users:password_change' %}"><p class="panel-2-p">Сменить пароль</p></a>
+            </div>
+
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Gear1.svg' %}" alt="8">
+                <a href="{% url 'users:profile' %}"><p class="panel-2-p">Настройки</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/SignOut1.svg' %}" alt="9">
+                <a href="{% url 'users:logout' %}"><p class="panel-2-p">Выйти из аккаунта</p></a>
+            </div>
+        </div>
+
+        <form action="" method="post">
+            {% csrf_token %}
+    <div class="settings-1">
+        <div class="settings-p">
+            <p class="settings-pp">АДРЕС ДОСТАВКИ</p>
+        </div>
+        {% if form.non_field_errors %}
+                <div class="account-p" style="color: #FF4242;">
+			        {{ form.non_field_errors }}
+		        </div>
+        {% endif %}
+        <div class="settings-ad">
+        <div class="settings-1">
+            <div class="adress-11">
+                <div class="adress-111">
+                    <p class="adress-111-p">Имя</p>
+<!--                    <input class="adress-111-input" type="text" placeholder="Александр">-->
+                            {{ form.first_name }}
+                            <div class="settings-left-1-error">{{ form.first_name.errors }}</div>
+                </div>
+                <div class="adress-112">
+                    <p class="adress-112-p">Фамилия</p>
+<!--                    <input class="adress-112-input" type="text" placeholder="Иванов">-->
+                        {{ form.last_name }}
+                            <div class="settings-left-1-error">{{ form.last_name.errors }}</div>
+                </div>
+            </div>
+            <div class="adress-12">
+                <p class="adress-12-p1">Отчество (По возможности)</p>
+<!--                <input class="adress-12-input" type="text">-->
+                {{ form.middle_name }}
+                <div class="settings-left-1-error">{{ form.middle_name.errors }}</div>
+            </div>
+            <div class="adress-12">
+                <p class="adress-12-p1">Адрес</p>
+<!--                <input class="adress-12-input" type="text" placeholder="Россия, Москва, Красная Площадь, Кремль">-->
+                {{ form.addr }}
+                <div class="settings-left-1-error">{{ form.addr.errors }}</div>
+            </div>
+            <div class="adress-12">
+                <p class="adress-12-p1">Страна</p>
+<!--                <input class="adress-12-input" type="text" placeholder="Россия">-->
+                {{ form.country }}
+                <div class="settings-left-1-error">{{ form.country.errors }}</div>
+            </div>
+            <div class="adress-12">
+                <p class="adress-12-p1">Регион</p>
+<!--                <input class="adress-12-input" type="text" placeholder="Московская область">-->
+                {{ form.region }}
+                <div class="settings-left-1-error">{{ form.region.errors }}</div>
+            </div>
+            <div class="adress-11">
+                <div class="adress-111">
+                    <p class="adress-111-p">Город</p>
+<!--                    <input class="adress-111-input" type="text" placeholder="Москва">-->
+                    {{ form.city }}
+                <div class="settings-left-1-error">{{ form.city.errors }}</div>
+                </div>
+                <div class="adress-112">
+                    <p class="adress-112-p">Индекс</p>
+<!--                    <input class="adress-112-input" type="text" placeholder="741111">-->
+                    {{ form.index }}
+                <div class="settings-left-1-error">{{ form.index.errors }}</div>
+                </div>
+            </div>
+            <div class="adress-12">
+                <p class="adress-12-p1">Email</p>
+<!--                <input class="adress-12-input" type="email" placeholder="Chipi-Chipi@mail.ru">-->
+                {{ form.email }}
+                <div class="settings-left-1-error">{{ form.email.errors }}</div>
+            </div>
+            <div class="adress-12">
+                <p class="adress-12-p1">Номер телефона</p>
+<!--                <input class="adress-12-input" type="text" placeholder="Телефона нет">-->
+                {{ form.phone }}
+                <div class="settings-left-1-error">{{ form.phone.errors }}</div>
+            </div>
+            <div class="adress-btn">
+                <button class="adress-button" type="submit">
+                    <p class="adress-button-p">СОХРАНИТЬ</p>
+                </button>
+            </div>
+        </div>
+            </div>
+    </div>
+        </form>
+    </div>
 {% endblock %}

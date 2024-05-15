@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
+from dotenv import load_dotenv
 from pathlib import Path
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +45,8 @@ INSTALLED_APPS = [
     'chipi.apps.ChipiConfig',
     'debug_toolbar',
     'users.apps.UsersConfig',
-    'mptt'
+    'mptt',
+    'crispy_forms'
 ,]
 
 MIDDLEWARE = [
@@ -102,11 +107,11 @@ DATABASES = {
     # }
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "chapa",
-        "USER": "chipi",
-        "PASSWORD": "1Mq3Z(?-C2Jm",
-        "HOST": "193.200.74.71",
-        "PORT": "5432",
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv('DB_USER'),
+        "PASSWORD": os.getenv('DB_PASSWORD'),
+        "HOST": os.getenv('DB_HOST'),
+        "PORT": os.getenv('DB_PORT'),
     }
 }
 

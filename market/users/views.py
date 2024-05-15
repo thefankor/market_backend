@@ -121,7 +121,7 @@ def edit_shop(request):
             form.save()
             form2.save()
             return redirect(reverse_lazy('users:edit_shop'))
-    return render(request, 'users/edit_shop.html', {'form': form, 'form2': form2})
+    return render(request, 'users/edit_shop.html', {'form': form, 'form2': form2, 'seller_id': user.shop.id})
 
 # def profile_a(request):
 #     if request.method == 'POST':

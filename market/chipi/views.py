@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -43,8 +44,14 @@ def index(request):
     else:
         fav_prod = []
         products = Product.objects.annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
+
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
-    return render(request, 'chipi/index2.html', context={"prod": products, "fav_prod": fav_prod,
+    # return render(request, 'chipi/index3.html', context={"prod": products, "fav_prod": fav_prod,
+    #                                                      'search_text': search_query or ''})
+    return render(request, 'chipi/index3.html', context={"prod": page_obj, "fav_prod": fav_prod,
                                                          'search_text': search_query or ''})
 
 
@@ -156,12 +163,12 @@ def cart_add_ajax(request):
     # return render('home')
 
 def cart_delete(request, cart_id):
-    cart = Cart.objects.get(id=cart_id)
+    cart = Cart.objects.get(id=cart_id, user=request.user.buyer)
     cart.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def cart_decr(request, cart_id):
-    cart = Cart.objects.get(id=cart_id)
+    cart = Cart.objects.get(id=cart_id, user=request.user.buyer)
     if cart.count != 1:
         cart.count -= 1
     cart.save()
@@ -211,12 +218,13 @@ def show_cart(request):
                 'total_count': total_count,
                 'total_sum': total_sum,
             }
-            return render(request, 'chipi/cart.html', context=data)
+            return render(request, 'chipi/cart2.html', context=data)
         elif request.user.is_shop:
             return HttpResponseNotFound('<h1>Корзина не доступна в режиме магазина</h1>')
         else:
             return redirect('users:login')
-    except:
+    except Exception as e:
+        print(e)
         return redirect('users:login')
 
 

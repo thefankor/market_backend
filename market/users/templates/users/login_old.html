@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'chipi/css/style-account-vhod.css' %}">
+<form action="" method="post">
+	<div class="account">
+		<div class="account-a">
+			<a href="{% url 'users:login' %}">
+				<p class="account-a1">Войти</p>
+			</a>
+			<a href="{% url 'users:register' %}">
+				<p class="account-a2">Регистрация</p>
+			</a>
+		</div>
+		<div class="poloski">
+			<div class="poloska1"></div>
+			<div class="poloska2"></div>
+		</div>
+		<div class="account-p">
+		{{ form.non_field_errors }}
+		</div>
+		<div class="account-p">
+			<p class="account-p1">Email адрес</p>
+<!--			<input class="account-p-input" type="text" name="username">-->
+				{{ form.username }}
+				{{ form.username.errors }}
+		</div>
+		<div class="parol">
+			<div class="parol-p">
+				<p class="parol-p1">Пароль</p>
+				<a href="index-parol.html">
+					<p class="parol-p2">Восстановить пароль</p>
+				</a>
+			</div>
+			<input class='parol-password' type="password" name="password">
+		</div>
+		<div class="account-btn">
+			<button class="account-btn1" type="submit">
+				<img src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+			</button>
+		</div>
+		<div class="pusto">
+			<div class="pusto1"></div>
+			<p class="pusto2">или</p>
+			<div class="pusto3"></div>
+		</div>
+		<a href="">
+			<div class="google">
+				<img class="google-img" src="{% static 'chipi/images/Google.svg' %}" alt="">
+				<p class="google-p"> Login with Google</p>
+			</div>
+		</a>
+	</div>
+	{% csrf_token %}
+	<input type="hidden" name="next" value="{{ next }}">
+</form>
+{% endblock %}

@@ -2,62 +2,117 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'chipi/css/style-account-registration.css' %}">
-<form action="" method="get">
+<!--<link rel="stylesheet" href="{% static 'chipi/css/style-account-registration.css' %}">-->
+<link rel="stylesheet" href="{% static 'chipi/css/style-account-vhod.css' %}">
+<form action="" method="post">
 	<div class="account">
-		<div class="account-a">
-			<a href="{% url 'users:login' %}">
-				<p class="account-a1">Войти</p>
-			</a>
-			<a href="{% url 'users:register' %}">
-				<p class="account-a2">Регистрация</p>
-			</a>
+        <div class="account-a">
+            <a href="{% url 'users:login' %}">
+                <p class="account-a1">Войти</p>
+            </a>
+            <a href="{% url 'users:register' %}">
+                <p class="account-a2">Регистрация</p>
+            </a>
+        </div>
+        <div class="poloski">
+            <div class="poloska2"></div>
+            <div class="poloska1"></div>
+        </div>
+        <div class="account-p" style="color: #FF4242;">
+			{{ form.non_field_errors }}
 		</div>
-		<div class="poloski">
-			<div class="poloska2"></div>
-			<div class="poloska1"></div>
-		</div>
-		<div class="account-p">
-			<p class="account-p1">Имя</p>
-			<input class="account-p-input" type="text" name="username">
-		</div>
-		<div class="account-p">
-			<p class="account-p1">Email адрес</p>
-			<input class="account-p-input" type="email" name="email">
-		</div>
-		<div class="parol">
-			<div class="parol-p">
-				<p class="parol-p1">Пароль</p>
-			</div>
-			<input class='parol-password' placeholder="Минимум 8 символов" type="password" name="password1">
-		</div>
-		<div class="parol">
-			<div class="parol-p">
-				<p class="parol-p1">Подтвердите пароль</p>
-			</div>
-			<input class='parol-password' type="password" name="password2">
-		</div>
-		<div class="politika">
-			<input class="politika-input" type="checkbox" name="politika" required>
-			<p class="politika-p">Согласны ли вы с <a class="politika-a" href="#">Условиями использования</a> и <a
-					class="politika-a" href="#">Политикой конфиденциальности?</a></p>
-		</div>
-		<div class="account-btn">
-			<button class="account-btn1" type="submit">
-				<img src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
-			</button>
-		</div>
-		<div class="pusto">
-			<div class="pusto1"></div>
-			<p class="pusto2">или</p>
-			<div class="pusto3"></div>
-		</div>
-		<a href="">
-			<div class="google">
-				<img class="google-img" src="{% static 'chipi/images/Google.svg' %}" alt="">
-				<p class="google-p">Sign up with Google</p>
-			</div>
-		</a>
+        <div class="account-p">
+            <p class="account-p1">Имя пользователя</p>
+<!--            <input class="account-p-input" type="text">-->
+                {{ form.username }}
+<!--                <p class="account-p1">{{ form.username.errors }}</p>-->
+        </div>
+        {% if form.username.errors %}
+        <div class="account-error">
+            <p class="account-p1">{{ form.username.errors }}</p>
+        </div>
+        {% endif %}
+
+        <div class="account-p">
+            <p class="account-p1">Номер телефона</p>
+<!--            <input class="account-p-input" type="email">-->
+                {{ form.phone }}
+<!--                <p class="account-p1">{{ form.phone.errors }}</p>-->
+        </div>
+        {% if form.phone.errors %}
+        <div class="account-error">
+            <p class="account-p1">{{ form.phone.errors }}</p>
+        </div>
+        {% endif %}
+
+        <div class="account-p">
+            <p class="account-p1">Email</p>
+<!--            <input class="account-p-input" type="email">-->
+                {{ form.email }}
+<!--                <p class="account-p1">{{ form.phone.errors }}</p>-->
+        </div>
+        {% if form.email.errors %}
+        <div class="account-error">
+            <p class="account-p1">{{ form.email.errors }}</p>
+        </div>
+        {% endif %}
+
+        <div class="parol">
+            <div class="parol-p">
+                <p class="parol-p1">Пароль</p>
+            </div>
+            <div class="parol-btn">
+<!--                <input class='parol-password' id="password-1" placeholder="Минимум 8 символов" type="password">-->
+                    {{ form.password1 }}
+<!--                    <p class="account-p1">{{ form.password1.errors }}</p>-->
+                <button class="parol-button" id="parol-1">
+                    <img src="{% static 'chipi/images/Eye.svg' %}" alt="eye">
+                </button>
+            </div>
+        </div>
+        {% if form.password1.errors %}
+        <div class="account-error">
+            <p class="account-p1">{{ form.password1.errors }}</p>
+        </div>
+        {% endif %}
+        <div class="parol">
+            <div class="parol-p">
+                <p class="parol-p1">Подтвердите пароль</p>
+            </div>
+            <div class="parol-btn">
+<!--                <input class='parol-password' id="password-2" placeholder="Минимум 8 символов" type="password">-->
+                    {{ form.password2 }}
+<!--                    <p class="account-p1">{{ form.password2.errors }}</p>-->
+                <button class="parol-button" id="parol-2">
+                    <img src="{% static 'chipi/images/Eye.svg' %}" alt="eye">
+                </button>
+            </div>
+        </div>
+        {% if form.password2.errors %}
+        <div class="account-error">
+            <p class="account-p1">{{ form.password2.errors }}</p>
+        </div>
+        {% endif %}
+<!--        <div class="politika">-->
+<!--            <input class="politika-input" type="checkbox" name="politika">-->
+<!--            <p class="politika-p">Согласны ли вы с <a class="politika-a" href="#">Условиями использования</a> и <a class="politika-a" href="#">Политикой конфиденциальности?</a></p>-->
+<!--        </div>-->
+        <div class="account-btn">
+            <button class="account-btn1" type="submit">
+                <img src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+            </button>
+        </div>
+        <!-- <div class="pusto">
+            <div class="pusto1"></div>
+            <p class="pusto2">или</p>
+            <div class="pusto3"></div>
+        </div>
+        <a href="">
+            <div class="google">
+                <img class="google-img" src="/фото/Google.svg" alt="">
+                <p class="google-p">Sign up with Google</p>
+            </div>
+        </a> -->
 	</div>
 	{% csrf_token %}
 	<input type="hidden" name="next" value="{{ next }}">

@@ -8,17 +8,16 @@
 
 <!--&gt;>>>>>> temp_branch-->
 
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Chipi-Chipi</title>-->
-<!--</head>-->
-<!--<body>-->
+<!DOCTYPE html>
+<html lang="ru">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chipi-Chipi</title>
+
 
 <!--    <link rel="stylesheet" href="style-head.css">-->
-<link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'chipi/css/style-account-vhod.css' %}">
 <div class="header">
 </div>
 <div class="header-line2">
@@ -33,21 +32,30 @@
 		<img class="header-line1-img2" src="{% static 'chipi/images/search_magnifier_icon_145939.png' %}" alt="Лупа">
 	</button>
 	{% if user.is_authenticated %}
+	{% if user.is_buyer %}
 	<a href="{% url 'cart' %}">
 		<img class='header-line1-img3' src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="image">
 	</a>
+
 	<a href="{% url 'favorites' %}">
 		<img class='header-line1-img4' src="{% static 'chipi/images/Heart.png' %}" alt="image">
 	</a>
+	{% endif %}
+	{% if user.is_buyer %}
 	<a href="{% url 'users:profile' %}">
-		<img class="header-line1-img5" src="{% static 'chipi/images/User.png' %}" alt="imagr">
+		<img class="header-line1-img4" src="{% static 'chipi/images/User.png' %}" alt="imagr">
 	</a>
+	{% else %}
+	<a href="{% url 'users:edit_shop' %}">
+		<img class="header-line1-img4" src="{% static 'chipi/images/User.png' %}" alt="imagr">
+	</a>
+	{% endif %}
 	<a href="{% url 'users:logout' %}">
-		<img class="header-line1-img5" src="{% static 'chipi/images/logout.svg' %}" alt="imagr">
+		<img class="header-line1-img4" src="{% static 'chipi/images/logout.svg' %}" alt="imagr">
 	</a>
 	{% else %}
 	<a href="{% url 'users:login' %}">
-		<img class="header-line1-img5" src="{% static 'chipi/images/logout.svg' %}" alt="imagr">
+		<img class="header-line1-img4" src="{% static 'chipi/images/logout.svg' %}" alt="imagr">
 	</a>
 	{% endif %}
 
@@ -212,7 +220,7 @@
 <div class="bottom">
 	<div class="bottom1">
 		<div class="bottom1-line1">
-			<img class="bottom1-img1" src="/фото/Union1.png" alt="">
+			<img class="bottom1-img1" src="{% static 'chipi/images/Union1.png' %}" alt="">
 			<a href="index-head.html">
 				<p class="bottom1-p1">Chipi-Chipi</p>
 			</a>
@@ -248,7 +256,7 @@
 		<a href="#">
 			<div class="bottom2-vse-tovary">
 				<p class="bottom2-p7">Посмотреть все товары</p>
-				<img class="bottom2-img1" src="/фото/ArrowRight3.png" alt="">
+				<img class="bottom2-img1" src="{% static 'chipi/images/ArrowRight3.png' %}" alt="">
 			</div>
 		</a>
 	</div>

@@ -1,15 +1,58 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+
+
+        <div class="tovary">
+            {% for p in prod %}
+            <div class="tovar">
+                <a href="{{ p.get_absolute_url }}">
+                    <img class="tovar-img" id="tovar-img1" src="{{ p.logo_image.url }}" alt="">
+                </a>
+                    <button id="heart-btn1">
+                        <img class="heart-icon" id="heart-icon"  src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+                    </button>
+                <div class="tovar-price">
+                    <p class="tovar-price-p1">{{ p.price }}</p>
+                    <img class="tovar-price-img1" src="{% static 'chipi/images/CurrencyRub.png' %}" alt="">
+                    <p class="tovar-price-p2">{{ p.price }}</p>
+                    <img class="tovar-price-img2" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                </div>
+                <a href="#">
+                    <p class="tovar-p">{{ p.title }}</p>
+                </a>
+                <div class="cart">
+                    <button class="cart-btn">
+                        <img class="cart-img" src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="">
+                        <p class="cart-p">Добавить</p>
+                    </button>
+                </div>
+            </div>
+
+
+            {% if forloop.counter|divisibleby:5 %}
+
+                </div>
+                <div class="tovary">
+            {% endif %}
+
+        {% endfor %}
+
+                    </div>
+                </div>
+<!--<br><br><br><br><br>-->
+
+
+
 
     {% for p in prod %}
         {% if p.logo_image %}
         <img src="{{ p.logo_image.url }}" width="100" height="100">
         {% endif %}
     {% if p.count == 0 %}
-        <p><b><s>{{ p.title }}</s></b></p>
+        <p><b><s>{{ p.title }}</s></b>{{ forloop.counter|divisibleby:5 }}</p>
     {% else %}
-        <p><b>{{ p.title|upper }}</b></p>
+        <p><b>{{ p.title|upper }} --- {{ forloop.counter }}/{{ forloop.counter|divisibleby:5 }}</b></p>
     {% endif %}
 
         {% if p.mark %}
@@ -20,7 +63,7 @@
     <p>{{ p.price }}₽</p>
     <a href="{{ p.get_absolute_url }}">click</a>
     {% if user.is_buyer %}
-
+<!--    CART-->
     <ul>{% if p.count_in_cart %}
         <span style="display: none;" id="cart0-{{ p.id }}">
             <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
@@ -66,7 +109,8 @@
 
         </span>
         {% endif %}
-
+<!--END CART-->
+<!--        FAV-->
         {% if p in fav_prod %}
         <a style="color: red; text-decoration: none; font-size: 25px" href="{% url 'rem_fav' product_id=p.id %}">
             ♥
@@ -77,7 +121,7 @@
             </a>
         {% endif %}
 
-
+<!--END FAV-->
     </ul>
 
     {% endif %}
@@ -87,4 +131,90 @@
     <hr>
     {% endif %}
     {% endfor %}
+
+
+
+
+
+<link rel="stylesheet" href="{% static 'chipi/css/index.css' %}">
+
+
+<!--        <div class="cards">-->
+<!--            <div class="first-card">-->
+<!--                <p class="cards-p1">Популярное</p>-->
+<!--                <p class="cards-p2">ASUS ROG STRIX<br>SCAR 2</p>-->
+<!--                <p class="cards-p3">Новый мощный игровой ноутбук<br>от ASUS</p>-->
+<!--                <button class="cards-btn1">-->
+<!--                    <p class="cards-p4">Купить</p>-->
+<!--                     <img class='cards-img1' src="/фото/ArrowRight.png" alt="">-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="second-card">-->
+<!--                <img class='cards-img2' src="/фото/image 28.png" alt="">-->
+<!--            </div>-->
+<!--            <div class="third-card">-->
+<!--                <p class="cards-p5">Новинка</p>-->
+<!--                <p class="cards-p6">Samsung Galaxy<br>S24 Ultra</p>-->
+<!--                <button class="cards-btn2">-->
+<!--                    <p class="cards-p4">Купить</p>-->
+<!--                    <img class='cards-img1' src="/фото/ArrowRight.png" alt="">-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="fourth-card">-->
+<!--                <img class="cards-img3" src="/фото/image 27.png" alt="">-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+
+
+
+        <div class="buttons">
+            {% if prod.has_previous %}
+            <a href="?page={{ prod.previous_page_number }}">
+                <button class="buttons-btn1">
+                    <img class='buttons-img1' src="{% static 'chipi/images/arrgreenleft.png' %}" alt="">
+                </button>
+            </a>
+            {% endif %}
+
+            {% for pg in prod.paginator.page_range %}
+                {% if prod.number == pg %}
+                     <button class="buttons-btn10">
+                        <p class="buttons-p10">{{ pg }}</p>
+                    </button>
+                {% elif pg >= prod.number|add:-2 and pg <= prod.number|add:2 %}
+                    <a href="?page={{ pg }}">
+                        <button class="buttons-btn2">
+                            <p class="buttons-p1">{{ pg }}</p>
+                        </button>
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+        {% if prod.has_next %}
+            <a href="?page={{ prod.next_page_number }}">
+                <button class="buttons-btn3">
+                    <img class='buttons-img2' src="{% static 'chipi/images/arrgreenright.png' %}" alt="">
+                </button>
+            </a>
+        {% endif %}
+            </div>
+
+
+<!--        <div class="reklama">-->
+<!--            <img class='reklama-img' src="/фото/image 311.png" alt="">-->
+<!--        </div>-->
+        <div class="rassilka">
+            <p class="rassilka-p1">Подпишитесь на нас для новостей</p>
+        </div>
+        <div class="rassilka1">
+            <input class='rassilka1-input' type="text" placeholder="Email адрес">
+            <button class="rassilka1-btn">
+                <p class="rassilka1-p1">Подписаться</p>
+                <img class="rassilka-img1" src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+            </button>
+        </div>
+
+
 {% endblock %}

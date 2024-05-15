@@ -12,8 +12,8 @@ from users.models import Buyer, Address
 
 
 class LoginUserForm(AuthenticationForm):
-    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'form-input'}))
-    password = forms.CharField(label='Password', widget=forms.PasswordInput())
+    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'account-p-input'}))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'parol-password', 'id': 'password'}))
     # is_buyer = forms.BooleanField(initial=True)
 
     class Meta:
@@ -27,14 +27,15 @@ class LoginUserForm(AuthenticationForm):
 
 
 class RegisterUserForm(UserCreationForm):
-    username = forms.CharField(label='Login', widget=forms.TextInput())
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
-    password2 = forms.CharField(label='Password again', widget=forms.PasswordInput())
-    phone = forms.CharField(label='Phone')
+    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'account-p-input',}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'parol-password',}))
+    password2 = forms.CharField(label='Password again', widget=forms.PasswordInput(attrs={'class': 'parol-password',}))
+    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'account-p-input',}))
+    email = forms.CharField(label='Email', widget=forms.TextInput(attrs={'class': 'account-p-input', }))
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'password1', 'password2', 'email']
+        fields = ['username', 'password1', 'password2', 'phone', 'email']
         labels = {
             'email': 'E-mail',
         }
@@ -74,7 +75,7 @@ class RegisterUserForm(UserCreationForm):
 
 
 class ProfileUserForm(forms.ModelForm):
-    username = forms.CharField(disabled=True,label='Login', widget=forms.TextInput())
+    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'settings-left-1-input',}))
     # email = forms.CharField(disabled=True, label='Email', widget=forms.TextInput())
     # buyer__id = forms.IntegerField(disabled=True)
     # buyer__phone = forms.IntegerField()
@@ -93,18 +94,21 @@ class ProfileUserForm(forms.ModelForm):
         return email
 
 class ProfileUser2Form(forms.ModelForm):
-    # phone = forms.CharField(disabled=True)
-    user = forms.IntegerField(disabled=True)
+    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'settings-left-1-input',}))
+    email = forms.CharField(label='EMail', widget=forms.TextInput(attrs={'class': 'settings-right-1-input', }))
+    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={'class': 'settings-right-1-input', }))
+    first_name = forms.CharField(label='first Name', widget=forms.TextInput(attrs={'class': 'settings-left-1-input', }))
+    middle_name = forms.CharField(label='Middle Name', widget=forms.TextInput(attrs={'class': 'settings-right-1-input', }))
+
+    # user = forms.IntegerField(disabled=True)
     class Meta:
         model = Buyer
-        fields = ['user', 'phone', 'email', 'last_name', 'first_name', 'middle_name', 'age', 'sex']
+        fields = ['phone', 'email', 'last_name', 'first_name', 'middle_name']
         labels = {
             'email': 'E-mail',
             'first_name': 'Имя',
             'last_name': 'Фамилия',
             'middle_name': 'Отчество',
-            'age': 'Возраст',
-            'sex': 'Пол',
             'phone': 'Номер телефона',
         }
     def clean_first_name(self):
@@ -195,22 +199,50 @@ class RegisterShopForm(UserCreationForm):
 
 
 class ProfileShopForm(forms.ModelForm):
-    phone = forms.CharField(disabled=True)
-    id = forms.IntegerField(disabled=True)
+    #
+    phone = forms.CharField(widget=forms.TextInput(attrs={'class': 'settings-left-1-input',}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'class': 'settings-left-1-input', }))
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'settings-left-1-input', }))
+    # id = forms.IntegerField(disabled=True)
     class Meta:
         model = Shop
-        fields = ['id', 'phone', 'email', 'name']
+        fields = ['phone', 'email', 'name']
         labels = {
             'email': 'E-mail',
             'phone': 'Номер телефона',
             'name': 'Название магазина',
-            'id': 'ShopID',
         }
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        # if get_user_model().objects.filter(email=email).exists():
+        if (( len(phone) != 12 and phone[0] != '8' and phone[0] != '7' ) or (len(phone) != 11 and phone[:2] != '+7')):
+            raise forms.ValidationError('Введите кореектный RU номер телефона в формате +79995554433!')
+        if phone[0] == '7':
+            phone_new = phone
+        elif phone[0] == '8':
+            phone_new = '7' + phone[1:]
+        else:
+            phone_new = phone[1:]
+        return phone_new
 
 
 class AddressForm(forms.ModelForm):
+    first_name = forms.CharField(label='first Name', widget=forms.TextInput(attrs={'class': 'adress-111-input', }))
+    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={'class': 'adress-112-input', }))
+    middle_name = forms.CharField(label='Middle Name',
+                                  widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+    addr = forms.CharField(label='Address', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+    country = forms.CharField(label='Country', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+    region = forms.CharField(label='Region', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+    city = forms.CharField(label='City', widget=forms.TextInput(attrs={'class': 'adress-111-input', }))
+    index = forms.CharField(label='Index', widget=forms.TextInput(attrs={'class': 'adress-112-input', }))
+    # adress-111-input
     # id = forms.IntegerField()
-    phone = forms.CharField()
+    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+    email = forms.CharField(label='EMail', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+
+    # phone = forms.CharField()
 
     class Meta:
         model = Address

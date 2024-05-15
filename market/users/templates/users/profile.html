@@ -1,23 +1,118 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<h1>Profile your</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-         <input type="hidden" name="next" value="{{ next }}">
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-         {% for f in form2 %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">SEND</button></p>
-    </form>
+<link rel="stylesheet" href="{% static 'chipi/css/profile.css' %}">
+<form action="" method="post">
+<div class="first-line">
 
-<hr>
-<p><a href="{% url 'users:address' %}">Edit address</a></p>
-<p><a href="{% url 'users:password_change' %}">Change password</a></p>
+        {% csrf_token %}
+        <div class="panel">
+            <div class="panel-1">
+                <img class="panel-1-img" src="{% static 'chipi/images/Stack1.svg' %}" alt="1">
+                <a href="{% url 'users:profile' %}"><p class="panel-1-p">Аккаунт</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Notebook1.svg' %}" alt="7">
+                <a href="{% url 'users:address' %}"><p class="panel-2-p">Карты и адреса</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Storefront1.svg' %}" alt="2">
+                <a href="{% url 'orders' %}"><p class="panel-2-p">История заказов</p></a>
+            </div>
+<!--            <div class="panel-2">-->
+<!--                <img class="panel-2-img" src="{% static 'chipi/images/MapPinLine1.svg' %}" alt="3">-->
+<!--                <a href="index-zakaz.html"><p class="panel-2-p">Отследить заказ</p></a>-->
+<!--            </div>-->
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/ShoppingCartSimple1.svg' %}" alt="4">
+                <a href="{% url 'cart' %}"><p class="panel-2-p">Корзина</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Heart1.svg' %}" alt="5">
+                <a href="{% url 'favorites' %}"><p class="panel-2-p">Список желаний</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/ArrowsCounterClockwise1.svg' %}" alt="6">
+                <a href="{% url 'users:password_change' %}"><p class="panel-2-p">Сменить пароль</p></a>
+            </div>
+
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Gear1.svg' %}" alt="8">
+                <a href="{% url 'users:profile' %}"><p class="panel-2-p">Настройки</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/SignOut1.svg' %}" alt="9">
+                <a href="{% url 'users:logout' %}"><p class="panel-2-p">Выйти из аккаунта</p></a>
+            </div>
+        </div>
+        <div class="settings-1">
+            <div class="settings-p">
+                <p class="settings-pp">НАСТРОЙКИ АККАУНТА</p>
+            </div>
+            {% if form.non_field_errors %}
+                <div class="account-p" style="color: #FF4242;">
+			        {{ form.non_field_errors }}
+		        </div>
+            {% endif %}
+            <div class="settings">
+                <div class="settings-img">
+                    <img class="settings-img-img" src="{% static 'chipi/images/egor2.jpg' %}" alt="">
+                </div>
+
+                <div class="settings-left">
+                    <div class="settings-left-1">
+                        <p class="settings-left-1-p">Имя пользователя</p>
+<!--                        <input class="settings-left-1-input" name="first_name" type="text" placeholder="chipi228">-->
+                            {{ form.username }}
+                            <div class="settings-left-1-error">{{ form.username.errors }}</div>
+                    </div>
+                    <div class="settings-left-1">
+                        <p class="settings-left-1-p">Номер телефона</p>
+<!--                        <input class="settings-left-1-input" type="text" placeholder="88005553535">-->
+                        {{ form2.phone }}
+                            <div class="settings-left-1-error">{{ form2.phone.errors }}</div>
+                    </div>
+                    <div class="settings-left-1">
+                        <p class="settings-left-1-p">Имя</p>
+<!--                        <input class="settings-left-1-input" type="email" placeholder="Иванов">-->
+                        {{ form2.first_name }}
+                            <div class="settings-left-1-error">{{ form2.first_name.errors }}</div>
+                    </div>
+
+                    <div class="settings-left-1-btn">
+                        <button type="submit" class="settings-left-1-button">
+                            <p class="settings-left-1-button-p">СОХРАНИТЬ</p>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="settings-right">
+                    <div class="settings-right-1">
+                        <p class="settings-right-1-p">Email</p>
+<!--                        <input class="settings-right-1-input" type="text" placeholder="Chipi-Chipi@mail.ru">-->
+                        {{ form2.email }}
+                            <div class="settings-left-1-error">{{ form2.email.errors }}</div>
+                    </div>
+                    <div class="settings-right-1">
+                        <p class="settings-right-1-p">Фамилия</p>
+<!--                        <input class="settings-right-1-input" type="email" placeholder="Иван">-->
+                        {{ form2.last_name }}
+                            <div class="settings-left-1-error">{{ form2.last_name.errors }}</div>
+                    </div>
+                    <div class="settings-right-1">
+                        <p class="settings-right-1-p">Отчество</p>
+<!--                        <input class="settings-right-1-input" type="text" placeholder="Иванонвич">-->
+                        {{ form2.middle_name }}
+                            <div class="settings-left-1-error">{{ form2.middle_name.errors }}</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
 {% endblock %}

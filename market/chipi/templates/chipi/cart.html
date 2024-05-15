@@ -36,3 +36,120 @@
     <a href="{% url 'create_order' %}"><button>Оформить заказ</button></a>
 <br><br><br><br><br>
 {% endblock %}
+
+
+ <link rel="stylesheet" href="{% static 'chipi/css/cart.css' %}">
+
+    <div class="cart">
+        <div class="cart-left">
+            <div class="cart-left-up">
+                <p class="cart-left-up-p">Корзина</p>
+            </div>
+            <div class="cart-left-up1">
+                <p class="cart-left-up1-p1">ТОВАР</p>
+                <p class="cart-left-up1-p2">ЦЕНА</p>
+                <p class="cart-left-up1-p3">КОЛИЧЕСТВО</p>
+                <p class="cart-left-up1-p4">СТОИМОСТЬ</p>
+            </div>
+            <div class="tovar">
+
+
+    {% for p in products %}
+                <div class="tovar1">
+                    <a href="{% url 'cart_delete' cart_id=p.id %}"><button class="tovar1-btn-img1">
+                        <img class="tovar-img1" src="{% static 'chipi/images/XCircle.svg' %}" alt="">
+                    </button></a>
+                    <img class="tovar-img2" src="{{ p.product.logo_image.url }}" width="50" alt="">
+                    <p class="tovar1-p1"><a href="{{ p.product.get_absolute_url }}" style="color: black;">{{ p.product.title }}</a></p>
+                    <p class="tovar1-p2">{{ p.product.price }}</p>
+                    <img class="tovar-img3" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+
+                    <div class="kolvo">
+                        {% if p.count == 1 %}
+                <a href=""><button class="kolvo-btn1" disabled="true">
+                            <img class="kolvo-img1" src="{% static 'chipi/images/Minus1.svg' %}" alt="">
+                        </button></a>
+                        {% else %}
+                <a href="{% url 'cart_decr' cart_id=p.id %}">
+                        <button class="kolvo-btn1">
+                            <img class="kolvo-img1" src="{% static 'chipi/images/Minus1.svg' %}" alt="">
+                        </button>
+                </a>
+                        {% endif %}
+
+                        <p class="kolvo-p">{{ p.count }}</p>
+                        <a href="{% url 'cart_add' product_id=p.product.id %}">
+                        <button class="kolvo-btn2">
+                            <img class="kolvo-img2" src="{% static 'chipi/images/Plus.svg' %}" alt="">
+                        </button>
+                            </a>
+                    </div>
+
+                    <p class="tovar1-p3">{{ p.sum }}</p>
+                    <img class="tovar-img4" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                </div>
+
+                {% endfor %}
+            </div>
+            <div class="knopki">
+                <a href="{% url 'home' %}">
+                <button class="knopka1">
+                    <img class="knopka1-img" src="{% static 'chipi/images/ArrowLeft.svg' %}" alt="">
+                    <p class="knopka1-p">ОБРАТНО В МАГАЗИН</p>
+                </button>
+                </a>
+<!--                <button class="knopka2">-->
+<!--                    <p class="knopka2-p">ОЧИСТИТЬ КОРЗИНУ</p>-->
+<!--                </button>-->
+            </div>
+        </div>
+        <div class="cart-right">
+            <div class="cart-right-1">
+                <div class="cart-right-11">
+                    <p class="cart-right-11-p">Итог</p>
+                </div>
+                <div class="cart-right-12">
+                    <p class="cart-right-12-p3">Товаров в корзине</p>
+                    <p class="cart-right-12-p4">{{ total_count }}</p>
+                </div>
+                <div class="cart-right-12">
+                    <p class="cart-right-12-p1">Итоговая цена</p>
+                    <p class="cart-right-12-p2">{{ total_sum }}</p>
+                    <img class="cart-right-12-img" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                </div>
+                 <div class="cart-right-12">
+                    <p class="cart-right-12-p3">Доставка</p>
+                    <p class="cart-right-12-p4">Бесплатно</p>
+                </div>
+
+
+                <p class="poloska"></p>
+                <div class="cart-right-12">
+                    <p class="cart-right-12-p5">Итого</p>
+                    <p class="cart-right-12-p6">{{ total_sum }}</p>
+                    <img class="cart-right-12-img" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                </div>
+                <div class="cart-right-12-btn">
+                    <a href="{% url 'create_order' %}">
+                    <button class="cart-right-12-btn1">
+                        <p class="cart-right-12-btn-p">ПЕРЕЙТИ К ОПЛАТЕ</p>
+                        <img class="cart-right-12-btn-img" src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+                    </button>
+                    </a>
+                </div>
+            </div>
+            <div class="cart-right-2">
+                <div class="cart-right-21">
+                    <p class="cart-right-21-p">Промокод</p>
+                </div>
+                <div class="cart-right-22">
+                    <input class="cart-right-22-input" type="text" placeholder="Введите промокод...">
+                </div>
+                <div class="cart-right-22-btn">
+                    <button class="cart-right-22-btn1">
+                        <p class="cart-right-22-btn-p">ПОДТВЕРДИТЬ</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
