@@ -249,7 +249,21 @@
 
         </span>
         {% endif %}
-                {% endif %}
+                {% else %}
+        <div class="cart">
+            <a href="{% url 'users:login' %}">
+                <button class="cart-btn">
+                    <img class="cart-img" src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="">
+                    <p class="cart-p">Добавить</p>
+                </button>
+            </a>
+            <a href="{% url 'users:login' %}">
+                <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+                </button>
+            </a>
+            </div>
+{% endif %}
 
 
 
