@@ -500,13 +500,17 @@ def search(request):
         else:
             products = Product.objects.filter(title__icontains=search_query, price__gte=min_pr or 0, price__lte=max_pr or 10**9
                 ).annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
+    paginator = Paginator(products, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     datacon = {
-                "prod": products,
+                "prod": page_obj,
                 "fav_prod": fav_prod,
                 "search_text": search_query or '',
                 "min_pr": min_pr or '0',
                 "max_pr": max_pr or '1000000',
-                "ctgs": ctgs
+                "ctgs": ctgs,
+                "count_res": len(products),
                }
     # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
     return render(request, 'chipi/search.html', context=datacon)
@@ -559,16 +563,20 @@ def show_category(request, category_slug):
                                               title__icontains=search_query, price__gte=min_pr or 0,
                                               price__lte=max_pr or 10 ** 9).annotate(
                 mark=Avg('reviews__score')).order_by('id').select_related('shop')
-
+    paginator = Paginator(products, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
     datacon = {
         "search_text": search_query or '',
-        "min_pr": min_pr or '',
-        "max_pr": max_pr or '',
+        "min_pr": min_pr or '0',
+        "max_pr": max_pr or '1000000',
         "ctgs": next_ctgs,
-        "prod": products,
+        "prod": page_obj,
         "fav_prod": fav_prod,
-        "path": path
+        "path": path,
+        "corrent_cat": category,
+        "count_res": len(products),
     }
     return render(request, 'chipi/cats.html', context=datacon)
 

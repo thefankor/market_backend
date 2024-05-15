@@ -10,6 +10,9 @@
             <input class="search" type="text" name="q" placeholder="Search.." value="{{ search_text }}" hidden="hidden">
 
         <div class="left-filter">
+            <form action="{% url 'search' %}" method="get" id="searchForm">
+            <input class="search" type="text" name="q" placeholder="Search.." value="{{ search_text }}" hidden="hidden">
+
 <!--            <div class="right-filter-line12">-->
 <!--                <select name="kategory" id="">-->
 <!--                    <option class="right-filter-line12-p" value="1">По популярности</option>-->
@@ -20,20 +23,14 @@
 <!--                </select>-->
 <!--            </div>-->
             <p class="filter-p">КАТЕГОРИИ</p>
+                <div class="filter-new">
+
             {% for ctgr in ctgs %}
-
-            <div class="left-filter-1">
-                 <a style="text-decoration:none; margin-top:9px;" href="{% url 'category' category_slug=ctgr.slug %}?s={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
-
-                    <input type="radio" name="cat" id="1" class="real-radio">
-
-                    <span class="custom-radio"></span>
-                    <label style="color: black;" for="1">{{ ctgr.name }}</label>
-    </a>
-            </div>
-
+                 <a style="text-decoration:none; margin-top:9px;" href="{% url 'category' category_slug=ctgr.slug %}?q={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
+                     <p class="filter-new-p">{{ ctgr.name }}</p>
+                 </a>
             {% endfor %}
-
+</div>
 
 
 
@@ -57,41 +54,258 @@
                   <input type="range" class="range-max" min="0" max="1000000" value="1000000">
                 </div>
             </div>
+            </form>
         </div>
-        </form>
+
 
         <div class="right-filter">
             <div class="right-filter-line1">
                 <div class="right-filter-line11">
                     <p class="right-filter-line11-p">Фильтры:</p>
-                    <p class="right-filter-line11-p1">Электроника</p>
-                    <img class="right-filter-line11-img" src="{% static 'chipi/images/X.png' %}" alt="">
-                    <p class="right-filter-line11-p1">Электроника</p>
-                    <img class="right-filter-line11-img" src="{% static 'chipi/images/фото1/X.png' %}" alt="">
-                    <p class="right-filter-line11-p1">Электроника</p>
-                    <img class="right-filter-line11-img" src="{% static 'chipi/images/фото1/X.png' %}" alt="">
-                    <p class="right-filter-line11-p2">6</p>
-                    <p class="right-filter-line11-p3">Результатов найдено</p>
+
+<!--                    <p class="right-filter-line11-p1">Электроника</p>-->
+<!--                    <img class="right-filter-line11-img" src="{% static 'chipi/images/X.png' %}" alt="">-->
+<!--                    <p class="right-filter-line11-p1">Электроника</p>-->
+<!--                    <img class="right-filter-line11-img" src="{% static 'chipi/images/фото1/X.png' %}" alt="">-->
+<!--                    <p class="right-filter-line11-p1">Электроника</p>-->
+<!--                    <img class="right-filter-line11-img" src="{% static 'chipi/images/фото1/X.png' %}" alt="">-->
+                    <div class="rfl">
+                        <p class="right-filter-line11-p2">{{ count_res }}</p>
+                        <p class="right-filter-line11-p3">Результатов найдено</p>
+                    </div>
+
                 </div>
             </div>
+
+
+ <div class="tovary">
+            {% for p in prod %}
+            <div class="tovar">
+            <a href="{{ p.get_absolute_url }}">
+                <img class="tovar-img" src="{{ p.logo_image.url }}" alt="">
+            </a>
+            <div class="tovar-price">
+                <p class="tovar-price-p1">{{ p.price }}</p>
+                <img class="tovar-price-img1" src="{% static 'chipi/images/CurrencyRub.png' %}" alt="">
+                <p class="tovar-price-p2">{{ p.price }}</p>
+                <img class="tovar-price-img2" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+            </div>
+            <a href="{{ p.get_absolute_url }}">
+                <p class="tovar-p">{{ p.title }}</p>
+            </a>
+
+            {% if user.is_buyer %}
+
+                {% if p.count_in_cart %}
+
+                <span style="display: none;" id="cart0-{{ p.id }}">
+                     <div class="cart">
+            <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
+                {% csrf_token %}
+            <button class="cart-btn">
+                    <img class="cart-img" src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="">
+                    <p class="cart-p">Добавить</p>
+                </button>
+            </a>
+
+         {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+
+                    </div>
+                </span>
+
+        <span id="cart1-{{ p.id }}">
+            <div class="quantity0">
+                <div class="quantity-block">
+                     <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
+               data-product-id="{{ p.id }}">
+                         <button class="minus-btn">
+                        <img class="kolvo-img1" src="{% static 'chipi/images/icons8-минус-24.png' %}" alt="">
+                    </button>
+           {% csrf_token %}
+                     </a>
+
+            <p id="prod-count-{{ p.id }}" class="quantity">{{ p.count_in_cart }}</p>
+
+            {% if p.count_in_cart == p.count %}
+                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
+                   data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
+                data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+            {% else %}
+                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
+                   data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
+                data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+            {% endif %}
+                    <button></button>
+            </div>
+        {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+
+
+            </div>
+        </span>
+
+        {% else %}
+
+        <span id="cart0-{{ p.id }}">
+            <div class="cart">
+                <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
+                    {% csrf_token %}
+                <button class="cart-btn">
+                        <img class="cart-img" src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="">
+                        <p class="cart-p">Добавить</p>
+                    </button>
+                </a>
+
+        {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+
+            </div>
+        </span>
+
+        <span style="display: none;" id="cart1-{{ p.id }}">
+            <div class="quantity0">
+                <div class="quantity-block">
+            <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
+               data-product-id="{{ p.id }}">
+                <button class="minus-btn">
+                        <img class="kolvo-img1" src="{% static 'chipi/images/icons8-минус-24.png' %}" alt="">
+                    </button>{% csrf_token %}
+            </a>
+                <p id="prod-count-{{ p.id }}" class="quantity">1</p>
+
+            <a href="{% url 'cart_add_ajax' %}" class="cart-inc"
+               data-product-id="{{ p.id }}" id="prod_nolast-{{ p.id }}">
+                <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}
+            </a>
+
+            <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
+            data-product-id="{{ p.id }}">
+                <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>
+                {% csrf_token %}</a>
+                </div>
+
+        {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+            </div>
+
+        </span>
+        {% endif %}
+                {% endif %}
+
+
+
         </div>
 
 
+            {% if forloop.counter|divisibleby:3 %}
+
+                </div>
+                <div class="tovary">
+            {% endif %}
+
+        {% endfor %}
+
+            </div>
+
+        </div>
 </div>
 
 
+{% if prod.has_other_pages %}
+        <div class="buttons">
+            {% if prod.has_previous %}
+            <a href="?page={{ prod.previous_page_number }}&q={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
+                <button class="buttons-btn1">
+                    <img class='buttons-img1' src="{% static 'chipi/images/arrgreenleft.png' %}" alt="">
+                </button>
+            </a>
+            {% endif %}
 
-
-
-    <form action="{% url 'search' %}" method="get" id="searchForm">
-            <input class="search" type="text" name="q" placeholder="Search.." value="{{ search_text }}" hidden="hidden">
-            Min price: <input class="search" type="text" name="min_price" placeholder="min" value="{{ min_pr }}">
-            Max price: <input class="search" type="text" name="max_price" placeholder="max" value="{{ max_pr }}">
-            </form>
-            {% for ctgr in ctgs %}
-<a href="{% url 'category' category_slug=ctgr.slug %}?s={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
-{{ ctgr.name }}</a>
+            {% for pg in prod.paginator.page_range %}
+                {% if prod.number == pg %}
+                     <button class="buttons-btn10">
+                        <p class="buttons-p10">{{ pg }}</p>
+                    </button>
+                {% elif pg >= prod.number|add:-2 and pg <= prod.number|add:2 %}
+                    <a href="?page={{ pg }}&q={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
+                        <button class="buttons-btn2">
+                            <p class="buttons-p1">{{ pg }}</p>
+                        </button>
+                    </a>
+                {% endif %}
             {% endfor %}
+
+        {% if prod.has_next %}
+            <a href="?page={{ prod.next_page_number }}&q={{ search_text }}&min_price={{ min_pr }}&max_price={{ max_pr }}">
+                <button class="buttons-btn3">
+                    <img class='buttons-img2' src="{% static 'chipi/images/arrgreenright.png' %}" alt="">
+                </button>
+            </a>
+        {% endif %}
+            </div>
+{% endif %}
+
+
+
         <script>
     document.getElementById('searchForm').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -103,91 +317,6 @@
 
 
 
-{% for p in prod %}
-        {% if p.logo_image %}
-        <img src="{{ p.logo_image.url }}" width="100" height="100">
-        {% endif %}
-    {% if p.count == 0 %}
-        <p><b><s>{{ p.title }}</s></b></p>
-    {% else %}
-        <p><b>{{ p.title|upper }}</b></p>
-    {% endif %}
-
-        {% if p.mark %}
-        <p>☆{{ p.mark|floatformat:1 }}</p>
-        {% else %}
-        <p>☆ 0.0</p>
-        {% endif %}
-    <p>{{ p.price }}₽</p>
-    <a href="{{ p.get_absolute_url }}">click</a>
-    {% if user.is_buyer %}
-
-    <ul>{% if p.count_in_cart %}
-        <span style="display: none;" id="cart0-{{ p.id }}">
-            <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
-                {% csrf_token %}
-            <button>Добавить в корзину&#128465</button>
-            </a>
-        </span>
-
-        <span id="cart1-{{ p.id }}">
-            <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
-               data-product-id="{{ p.id }}"><button>-</button>{% csrf_token %}</a>
-            <span id="prod-count-{{ p.id }}">{{ p.count_in_cart }}</span>
-            {% if p.count_in_cart == p.count %}
-                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
-                   data-product-id="{{ p.id }}"><button disabled="true">+</button>{% csrf_token %}</a>
-                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
-                data-product-id="{{ p.id }}"><button>+</button>{% csrf_token %}</a>
-            {% else %}
-                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
-                   data-product-id="{{ p.id }}"><button>+</button>{% csrf_token %}</a>
-                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
-                data-product-id="{{ p.id }}"><button disabled="true">+</button>{% csrf_token %}</a>
-            {% endif %}
-        </span>
-
-        {% else %}
-
-        <span id="cart0-{{ p.id }}">
-            <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
-                {% csrf_token %}
-            <button>Добавить в корзину&#128465</button>
-            </a>
-        </span>
-
-        <span style="display: none;" id="cart1-{{ p.id }}">
-            <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
-               data-product-id="{{ p.id }}"><button>-</button>{% csrf_token %}</a>
-                <span id="prod-count-{{ p.id }}"> 1 </span>
-            <a href="{% url 'cart_add_ajax' %}" class="cart-inc"
-               data-product-id="{{ p.id }}" id="prod_nolast-{{ p.id }}"><button>+</button>{% csrf_token %}</a>
-            <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
-            data-product-id="{{ p.id }}"><button disabled="true">+</button>{% csrf_token %}</a>
-
-        </span>
-        {% endif %}
-
-        {% if p in fav_prod %}
-        <a style="color: red; text-decoration: none; font-size: 25px" href="{% url 'rem_fav' product_id=p.id %}">
-            ♥
-            </a>
-        {% else %}
-        <a style="color: black; text-decoration: none; font-size: 25px" href="{% url 'add_fav' product_id=p.id %}">
-            ♥
-            </a>
-        {% endif %}
-
-
-    </ul>
-
-    {% endif %}
-
-    <p>shop:<a href="{{ p.shop.get_absolute_url }}">{{ p.shop.name }}</a> </p>
-    {% if not forloop.last %}
-    <hr>
-    {% endif %}
-    {% endfor %}
 
 <script src="{% static 'chipi/js/search.js' %}"></script>
 

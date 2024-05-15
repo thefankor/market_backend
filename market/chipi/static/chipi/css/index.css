@@ -747,7 +747,6 @@ body {
     height: 180px;
     display: flex;
     border-radius: 25px;
-    position: relative;
 }
 
 .tovar-price {

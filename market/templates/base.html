@@ -68,17 +68,11 @@
                     <img class="header-line3-new-img" src="{% static 'chipi/images/Vector.png' %}" alt="">
                 </button>
                 <div class="category">
-                    <a href="/html/index-filter.html"><p class="category-p">Электроника</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Одежда</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Бытовая техника</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Дом и сад</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Аптека</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Товары для животных</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Аксессуары</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Автотовары</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Мебель</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Красота и здоровье</p></a>
-                    <a href="/html/index-filter.html"><p class="category-p">Продукты</p></a>
+					{% get_category as ctg %}
+    				{% recursetree ctg %}
+					<a href="{% url 'category' category_slug=node.slug %}"><p class="category-p">{{ node.name }}</p></a>
+    				{% endrecursetree %}
+
                 </div>
             </div>
 	<img class='header-line3-img1' src="{% static 'chipi/images/MapPinLine.png' %}" alt="image">
@@ -125,6 +119,7 @@
 <!--        <form action="{% url 'search' %}" method="get">-->
 <!--            <input class="search" type="text" name="q" placeholder="Search.." value="{{ search_text }}">-->
 <!--        </form>-->
+
 
 
 
