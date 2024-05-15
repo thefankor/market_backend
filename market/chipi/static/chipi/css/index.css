@@ -883,3 +883,406 @@ body {
     height: 20px;
     background-color: #87d582;
 }
+
+@media (max-width: 1365px) {
+    .tovar {
+        margin-left: 60px;
+    }
+    .rassilka-p1 {
+        margin-left: 490px;
+    }
+
+    .rassilka1-input {
+        margin-left: 455px;
+    }
+}
+
+@media (max-width: 1325px) {
+    .bottom2 {
+        margin-left: 70px;
+    }
+
+    .bottom1 {
+        margin-left: 250px;
+    }
+    .tovar {
+        margin-left: 50px;
+    }
+    .rassilka-p1 {
+        margin-left: 450px;
+    }
+
+    .rassilka1-input {
+        margin-left: 415px;
+    }
+}
+
+@media (max-width: 1300px) {
+    .header-line1-img3 {
+        margin-left: 70px;
+    }
+
+    .header-line1-img4 {
+        margin-left: 20px;
+    }
+
+    .header-line3-img4 {
+        margin-left: 30px;
+    }
+    .rassilka-p1 {
+        margin-left: 430px;
+    }
+
+    .rassilka1-input {
+        margin-left: 395px;
+    }
+}
+
+@media (max-width: 1274px) {
+    .header-line1-p1 {
+        font-size: 18px;
+    }
+
+    .header-line1-input {
+        width: 400px;
+    }
+    .tovary {
+        margin-left: 70px;
+    }
+
+    .header-line1-img3 {
+        margin-left: 40px;
+    }
+
+    .bottom2 {
+        margin-left: 60px;
+    }
+}
+
+@media (max-width: 1244px) {
+    .tovary {
+        margin-left: 50px;
+    }
+    .tovar {
+        margin-left: 45px;
+    }
+    .rassilka-p1 {
+        margin-left: 400px;
+    }
+    .rassilka1-input {
+        margin-left: 365px;
+    }
+}
+
+@media (max-width: 1224px) {
+    .tovary {
+        margin-left: 40px;
+    }
+    .tovar {
+        margin-left: 40px;
+    }
+    .rassilka-p1 {
+        margin-left: 380px;
+    }
+    .rassilka1-input {
+        margin-left: 345px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .tovary {
+        margin-left: 30px;
+    }
+    .rassilka-p1 {
+        margin-left: 370px;
+    }
+    .rassilka1-input {
+        margin-left: 335px;
+    }
+}
+
+@media (max-width: 1160px) {
+    .rassilka-p1 {
+        margin-left: 350px;
+    }
+    .rassilka1-input {
+        margin-left: 315px;
+    }
+    .tovary {
+        margin-left: 20px;
+    }
+}
+
+@media (max-width: 1140px) {
+    .rassilka-p1 {
+        margin-left: 330px;
+    }
+    .rassilka1-input {
+        margin-left: 295px;
+    }
+}
+
+@media (max-width: 1120px) {
+    .rassilka-p1 {
+        margin-left: 310px;
+    }
+    .rassilka1-input {
+        margin-left: 275px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .rassilka-p1 {
+        margin-left: 290px;
+    }
+    .rassilka1-input {
+        margin-left: 255px;
+    }
+}
+@media (max-width: 1080px) {
+    .header-line1-input {
+        width: 300px;
+    }
+
+    .header-line2 {
+        padding-left: 150px;
+    }
+
+    .header-line3-new {
+        margin: 10px 40px 10px 150px;
+    }
+    .category {
+        margin-left: 150px;
+    }
+
+    .header-line3-a1 {
+        font-size: 12px;
+    }
+
+    .header-line3-a4 {
+        font-size: 12px;
+    }
+
+    .bottom1 {
+        margin-left: 150px;
+    }
+
+    .bottom2-p2 {
+        font-size: 12px;
+    }
+
+    .bottom1-p3 {
+        font-size: 12px;
+    }
+
+    .bottom2-p7 {
+        font-size: 12px;
+    }
+    .header-line3-a1 {
+        font-size: 12px;
+    }
+
+    .header-line3-a4 {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 1060px) {
+    .rassilka-p1 {
+        margin-left: 270px;
+    }
+    .rassilka1-input {
+        margin-left: 235px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .header-line1-input {
+        width: 300px;
+    }
+
+    .header-line2 {
+        padding-left: 100px;
+    }
+
+    .header-line3-new {
+        margin: 10px 40px 10px 100px;
+        width: 140px;
+    }
+    .header-line3-p {
+        font-size: 12px;
+        margin-left: 2px;
+        margin-top: 1px;
+    }
+    .category {
+        margin-left: 100px;
+    }
+
+    .bottom1 {
+        margin-left: 100px;
+    }
+    .rassilka-p1 {
+        margin-left: 250px;
+    }
+    .rassilka1-input {
+        margin-left: 215px;
+    }
+}
+
+@media (max-width: 970px) {
+    .rassilka-p1 {
+        margin-left: 230px;
+    }
+    .rassilka1-input {
+        margin-left: 195px;
+    }
+}
+
+
+@media (max-width: 930px)  {
+    .rassilka-p1 {
+        margin-left: 210px;
+    }
+    .rassilka1-input {
+        margin-left: 175px;
+    }
+}
+@media (max-width: 890px) {
+    .header-line1-input {
+        width: 280px;
+    }
+
+    .header-line2 {
+        padding-left: 80px;
+    }
+
+    .header-line3-new {
+        margin: 10px 40px 10px 80px;
+    }
+    .category {
+        margin-left: 80px;
+    }
+
+    .bottom1 {
+        margin-left: 80px;
+    }
+
+    .bottom1-p1 {
+        font-size: 20px;
+    }
+
+    .bottom1-img1 {
+        height: 60px;
+        width: 40px;
+    }
+
+    .bottom2 {
+        margin-left: 45px;
+    }
+}
+
+@media (max-width: 880px)  {
+    .rassilka-p1 {
+        margin-left: 200px;
+    }
+    .rassilka1-input {
+        margin-left: 165px;
+    }
+}
+@media (max-width: 850px) {
+    .rassilka-p1 {
+        margin-left: 190px;
+    }
+    .rassilka1-input {
+        margin-left: 150px;
+    }
+    .header-line2 {
+        padding-left: 55px;
+    }
+
+    .header-line3-new {
+        margin: 10px 40px 10px 55px;
+    }
+    .category {
+        margin-left: 55px;
+    }
+
+    .bottom1 {
+        margin-left: 55px;
+    }
+
+    .account {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 820px) {
+    .rassilka-p1 {
+        margin-left: 170px;
+    }
+    .rassilka1-input {
+        margin-left: 130px;
+    }
+    .header-line3-a4 {
+        display: none;
+    }
+
+    .header-line3-img4 {
+        display: none;
+    }
+    .header-line1-input {
+        width: 240px;
+    }
+}
+
+@media (max-width: 800px)  {
+    .rassilka-p1 {
+        margin-left: 150px;
+    }
+    .rassilka1-input {
+        margin-left: 110px;
+    }
+}
+@media (max-width: 770px) {
+    .rassilka-p1 {
+        margin-left: 140px;
+    }
+    .rassilka1-input {
+        margin-left: 100px;
+    }
+    .header-line3-a4 {
+        display: none;
+    }
+
+    .header-line3-img4 {
+        display: none;
+    }
+
+    .header-line1-input {
+        width: 210px;
+        margin-left: 30px;
+    }
+
+    .header-line2 {
+        padding-left: 50px;
+    }
+
+    .header-line3-new {
+        margin: 10px 40px 10px 50px;
+    }
+    .category {
+        margin-left: 50px;
+    }
+
+    .bottom1 {
+        margin-left: 50px;
+    }
+
+    .bottom2 {
+        margin-left: 34px;
+    }
+
+    .tovary {
+        margin-left: 0px;
+    }
+}
