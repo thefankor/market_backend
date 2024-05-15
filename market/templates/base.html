@@ -17,7 +17,8 @@
 
 
 <!--    <link rel="stylesheet" href="style-head.css">-->
-<link rel="stylesheet" href="{% static 'chipi/css/style-account-vhod.css' %}">
+
+<link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
 <div class="header">
 </div>
 <div class="header-line2">
@@ -61,20 +62,25 @@
 
 </div>
 <div class="header-line3">
-	<select class='header-line3-select' name="category">
-		<option class="header-line3-option" value="1">Все категории</option>
-		<option class="header-line3-option" value="2">Электроника</option>
-		<option class="header-line3-option" value="3">Одежда</option>
-		<option class="header-line3-option" value="4">Бытовая техника</option>
-		<option class="header-line3-option" value="5">Дом и сад</option>
-		<option class="header-line3-option" value="6">Аптека</option>
-		<option class="header-line3-option" value="7">Товары для животных</option>
-		<option class="header-line3-option" value="8">Аксессуары</option>
-		<option class="header-line3-option" value="9">Автотовары</option>
-		<option class="header-line3-option" value="10">Мебель</option>
-		<option class="header-line3-option" value="11">Красота и здоровье</option>
-		<option class="header-line3-option" value="12">Продукты</option>
-	</select>
+	 <div class="filter">
+                <button class="header-line3-new">
+                    <p class="header-line3-p">Все категории</p>
+                    <img class="header-line3-new-img" src="{% static 'chipi/images/Vector.png' %}" alt="">
+                </button>
+                <div class="category">
+                    <a href="/html/index-filter.html"><p class="category-p">Электроника</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Одежда</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Бытовая техника</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Дом и сад</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Аптека</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Товары для животных</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Аксессуары</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Автотовары</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Мебель</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Красота и здоровье</p></a>
+                    <a href="/html/index-filter.html"><p class="category-p">Продукты</p></a>
+                </div>
+            </div>
 	<img class='header-line3-img1' src="{% static 'chipi/images/MapPinLine.png' %}" alt="image">
 	<a class="header-line3-a1" href="index-zakaz.html">Отследить заказ</a>
 	<img class='header-line3-img2' src="{% static 'chipi/images/Vector1.png' %}" alt="image">
@@ -284,6 +290,7 @@
 </div>
 <script src="{% static 'chipi/js/jquery/jquery-3.7.1.min.js' %}"></script>
 <script src="{% static 'chipi/js/jquery-ajax.js' %}"></script>
+<script src="{% static 'chipi/js/head.js' %}"></script>
 </body>
 
 </html>

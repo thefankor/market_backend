@@ -6,28 +6,179 @@
         <div class="tovary">
             {% for p in prod %}
             <div class="tovar">
-                <a href="{{ p.get_absolute_url }}">
-                    <img class="tovar-img" id="tovar-img1" src="{{ p.logo_image.url }}" alt="">
-                </a>
-                    <button id="heart-btn1">
-                        <img class="heart-icon" id="heart-icon"  src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+            <a href="{{ p.get_absolute_url }}">
+                <img class="tovar-img" src="{{ p.logo_image.url }}" alt="">
+            </a>
+            <div class="tovar-price">
+                <p class="tovar-price-p1">{{ p.price }}</p>
+                <img class="tovar-price-img1" src="{% static 'chipi/images/CurrencyRub.png' %}" alt="">
+                <p class="tovar-price-p2">{{ p.price }}</p>
+                <img class="tovar-price-img2" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+            </div>
+            <a href="{{ p.get_absolute_url }}">
+                <p class="tovar-p">{{ p.title }}</p>
+            </a>
+
+            {% if user.is_buyer %}
+
+                {% if p.count_in_cart %}
+
+                <span style="display: none;" id="cart0-{{ p.id }}">
+                     <div class="cart">
+            <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
+                {% csrf_token %}
+            <button class="cart-btn">
+                    <img class="cart-img" src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="">
+                    <p class="cart-p">Добавить</p>
+                </button>
+            </a>
+
+         {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+
+                    </div>
+                </span>
+
+        <span id="cart1-{{ p.id }}">
+            <div class="quantity0">
+                <div class="quantity-block">
+                     <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
+               data-product-id="{{ p.id }}">
+                         <button class="minus-btn">
+                        <img class="kolvo-img1" src="{% static 'chipi/images/icons8-минус-24.png' %}" alt="">
                     </button>
-                <div class="tovar-price">
-                    <p class="tovar-price-p1">{{ p.price }}</p>
-                    <img class="tovar-price-img1" src="{% static 'chipi/images/CurrencyRub.png' %}" alt="">
-                    <p class="tovar-price-p2">{{ p.price }}</p>
-                    <img class="tovar-price-img2" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
-                </div>
-                <a href="#">
-                    <p class="tovar-p">{{ p.title }}</p>
-                </a>
-                <div class="cart">
-                    <button class="cart-btn">
+           {% csrf_token %}
+                     </a>
+
+            <p id="prod-count-{{ p.id }}" class="quantity">{{ p.count_in_cart }}</p>
+
+            {% if p.count_in_cart == p.count %}
+                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
+                   data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
+                data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+            {% else %}
+                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
+                   data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
+                data-product-id="{{ p.id }}"> <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}</a>
+            {% endif %}
+                    <button></button>
+            </div>
+        {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+
+
+            </div>
+        </span>
+
+        {% else %}
+
+        <span id="cart0-{{ p.id }}">
+            <div class="cart">
+                <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
+                    {% csrf_token %}
+                <button class="cart-btn">
                         <img class="cart-img" src="{% static 'chipi/images/ShoppingCartSimple.png' %}" alt="">
                         <p class="cart-p">Добавить</p>
                     </button>
-                </div>
+                </a>
+
+        {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+
             </div>
+        </span>
+
+        <span style="display: none;" id="cart1-{{ p.id }}">
+            <div class="quantity0">
+                <div class="quantity-block">
+            <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
+               data-product-id="{{ p.id }}">
+                <button class="minus-btn">
+                        <img class="kolvo-img1" src="{% static 'chipi/images/icons8-минус-24.png' %}" alt="">
+                    </button>{% csrf_token %}
+            </a>
+                <p id="prod-count-{{ p.id }}" class="quantity">1</p>
+
+            <a href="{% url 'cart_add_ajax' %}" class="cart-inc"
+               data-product-id="{{ p.id }}" id="prod_nolast-{{ p.id }}">
+                <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>{% csrf_token %}
+            </a>
+
+            <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
+            data-product-id="{{ p.id }}">
+                <button class="plus-btn">
+                        <img class="kolvo-img2" src="{% static 'chipi/images/icons8-плюс-24.png' %}" alt="">
+                    </button>
+                {% csrf_token %}</a>
+                </div>
+
+        {% if p in fav_prod %}
+        <a href="{% url 'rem_fav' product_id=p.id %}">
+             <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/icons8-сердце-30.png' %}" alt="">
+             </button>
+        </a>
+        {% else %}
+        <a href="{% url 'add_fav' product_id=p.id %}">
+            <button class="heart-btn1">
+                    <img class="heart-icon" src="{% static 'chipi/images/Heart1.svg' %}" alt="">
+             </button>
+        </a>
+        {% endif %}
+            </div>
+
+        </span>
+        {% endif %}
+                {% endif %}
+
+
+
+        </div>
 
 
             {% if forloop.counter|divisibleby:5 %}
@@ -45,92 +196,6 @@
 
 
 
-    {% for p in prod %}
-        {% if p.logo_image %}
-        <img src="{{ p.logo_image.url }}" width="100" height="100">
-        {% endif %}
-    {% if p.count == 0 %}
-        <p><b><s>{{ p.title }}</s></b>{{ forloop.counter|divisibleby:5 }}</p>
-    {% else %}
-        <p><b>{{ p.title|upper }} --- {{ forloop.counter }}/{{ forloop.counter|divisibleby:5 }}</b></p>
-    {% endif %}
-
-        {% if p.mark %}
-        <p>☆{{ p.mark|floatformat:1 }}</p>
-        {% else %}
-        <p>☆ 0.0</p>
-        {% endif %}
-    <p>{{ p.price }}₽</p>
-    <a href="{{ p.get_absolute_url }}">click</a>
-    {% if user.is_buyer %}
-<!--    CART-->
-    <ul>{% if p.count_in_cart %}
-        <span style="display: none;" id="cart0-{{ p.id }}">
-            <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
-                {% csrf_token %}
-            <button>Добавить в корзину&#128465</button>
-            </a>
-        </span>
-
-        <span id="cart1-{{ p.id }}">
-            <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
-               data-product-id="{{ p.id }}"><button>-</button>{% csrf_token %}</a>
-            <span id="prod-count-{{ p.id }}">{{ p.count_in_cart }}</span>
-            {% if p.count_in_cart == p.count %}
-                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
-                   data-product-id="{{ p.id }}"><button disabled="true">+</button>{% csrf_token %}</a>
-                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
-                data-product-id="{{ p.id }}"><button>+</button>{% csrf_token %}</a>
-            {% else %}
-                <a href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_nolast-{{ p.id }}"
-                   data-product-id="{{ p.id }}"><button>+</button>{% csrf_token %}</a>
-                <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
-                data-product-id="{{ p.id }}"><button disabled="true">+</button>{% csrf_token %}</a>
-            {% endif %}
-        </span>
-
-        {% else %}
-
-        <span id="cart0-{{ p.id }}">
-            <a href="{% url 'cart_add_ajax' %}" class="add-to-cart" data-product-id="{{ p.id }}">
-                {% csrf_token %}
-            <button>Добавить в корзину&#128465</button>
-            </a>
-        </span>
-
-        <span style="display: none;" id="cart1-{{ p.id }}">
-            <a href="{% url 'cart_decr_in_index_ajax' %}" class="cart-decr"
-               data-product-id="{{ p.id }}"><button>-</button>{% csrf_token %}</a>
-                <span id="prod-count-{{ p.id }}"> 1 </span>
-            <a href="{% url 'cart_add_ajax' %}" class="cart-inc"
-               data-product-id="{{ p.id }}" id="prod_nolast-{{ p.id }}"><button>+</button>{% csrf_token %}</a>
-            <a style="display: none;" href="{% url 'cart_add_ajax' %}" class="cart-inc" id="prod_last-{{ p.id }}"
-            data-product-id="{{ p.id }}"><button disabled="true">+</button>{% csrf_token %}</a>
-
-        </span>
-        {% endif %}
-<!--END CART-->
-<!--        FAV-->
-        {% if p in fav_prod %}
-        <a style="color: red; text-decoration: none; font-size: 25px" href="{% url 'rem_fav' product_id=p.id %}">
-            ♥
-            </a>
-        {% else %}
-        <a style="color: black; text-decoration: none; font-size: 25px" href="{% url 'add_fav' product_id=p.id %}">
-            ♥
-            </a>
-        {% endif %}
-
-<!--END FAV-->
-    </ul>
-
-    {% endif %}
-
-    <p>shop:<a href="{{ p.shop.get_absolute_url }}">{{ p.shop.name }}</a> </p>
-    {% if not forloop.last %}
-    <hr>
-    {% endif %}
-    {% endfor %}
 
 
 
@@ -167,8 +232,6 @@
 
 
 
-
-
         <div class="buttons">
             {% if prod.has_previous %}
             <a href="?page={{ prod.previous_page_number }}">
@@ -201,7 +264,7 @@
         {% endif %}
             </div>
 
-
+<br><br>
 <!--        <div class="reklama">-->
 <!--            <img class='reklama-img' src="/фото/image 311.png" alt="">-->
 <!--        </div>-->

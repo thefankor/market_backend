@@ -504,8 +504,8 @@ def search(request):
                 "prod": products,
                 "fav_prod": fav_prod,
                 "search_text": search_query or '',
-                "min_pr": min_pr or '',
-                "max_pr": max_pr or '',
+                "min_pr": min_pr or '0',
+                "max_pr": max_pr or '1000000',
                 "ctgs": ctgs
                }
     # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
