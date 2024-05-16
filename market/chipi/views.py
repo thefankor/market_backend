@@ -76,6 +76,7 @@ def show_product(request, product_id):
     photos = ProductImage.objects.filter(product=product)
     reviews = Review.objects.filter(product_id=product_id)
     if request.user.is_authenticated and request.user.is_buyer:
+        favr = Favorite.objects.filter(product=product, user=request.user.buyer)
         corrent_r = Review.objects.filter(product=product, user=request.user.buyer)
         prod_bought = Order.objects.filter(product=product, user=request.user.buyer, status=Order.Status.DELIVERED)
         if len(prod_bought) == 0:
@@ -83,6 +84,7 @@ def show_product(request, product_id):
         else:
             is_bought = True
     else:
+        favr = []
         corrent_r = []
         is_bought = False
     user = request.user
@@ -110,7 +112,10 @@ def show_product(request, product_id):
         'reviews': reviews,
         'is_bought': is_bought,
         'rev_count': len(corrent_r),
+        'favr': len(favr),
     }
+
+
     return render(request, 'chipi/product.html', context=data)
 
 def show_shop(request, seller_id):

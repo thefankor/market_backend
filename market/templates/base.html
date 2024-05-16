@@ -19,6 +19,12 @@
 <!--    <link rel="stylesheet" href="style-head.css">-->
 
 <link rel="stylesheet" href="{% static 'chipi/css/style.css' %}">
+	{% if user.is_buyer %}
+	{% get_cart filter=user.pk as cart %}
+	<div class="cart-icon">
+        <p class="cart-icon-p"><span id="prod-cart-count">{{ cart }}</span></p>
+    </div>
+	{% endif %}
 <div class="header">
 </div>
 <div class="header-line2">

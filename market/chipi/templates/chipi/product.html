@@ -1,52 +1,197 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
-    {% if product.logo_image %}
-        <img src="{{ product.logo_image.url }}" width="200" >
-    {% endif %}
-    <h1>{{ product.title }}</h1>
-    <p>{{ product.price }}₽</p>
-    {% if product.count == 0 %}
-    <hr><p>Нет в наличии</p><hr>
-    {% endif %}
-    <p>{{ product.description|linebreaks }}</p>
-    <p>shop: <a href="{{ product.shop.get_absolute_url }}">{{ product.shop.name }}</a> </p>
-    {% for ph in photos %}
-            <p><img src="{{ ph.image.url }}" width="100" height="100"></p>
-    {% endfor %}
-    <hr>
-    {% if reviews %}
-    {% for r in reviews %}
-        {{ r.user.first_name }}
-        {{ r.score }}☆
-        {{ r.text }}
-        {% if user.buyer == r.user %}
-        {% if r.image %}
-        <p><img src="{{ r.image.url }}" width="100" height="100"></p>
-        {% endif %}
-        <a href="{% url 'rem_review' rev_id=r.id %}"><button>Удалить отзыв</button></a>
-        {% endif %}
-        <hr>
-    {% endfor %}
-    {% else %}
-    <p>Отзывов пока нет</p>
-    {% endif %}
-    <hr>
-    {% if is_bought and rev_count == 0 %}
-    <h2>Оставить отзыв</h2>
-     <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">SEND</button></p>
-    </form>
-    {% endif %}
+<link rel="stylesheet" href="{% static 'chipi/css/product.css' %}">
+        <div style="display: flex; flex-direction: column;">
+            <div class="container-img1">
+                <div class="container-img">
+                    {% for ph in photos %}
+                    <img class='phone-img1' src="{{ ph.image.url }}" alt="image">
+                     {% endfor %}
 
-    {% if user.shop.id == product.shop.id %}
-        <p><a href="{% url 'edit_product' product_id=product.id %}">(edit)</a></p>
-        {% endif %}
+                </div>
+                <img class='header-line3-img7' src="{{ product.logo_image.url }}" alt="image">
+                <div class="container-text9">
+                    <p class="a9" style=" font-size: 18px;">{{ product.title }}</p>
+                    <div class="container-button_kup">
+                        <div>
+                            <div class="container-text10">
+                                <p class="a10">Артикул: A{{ product.id }}</p>
+                                  <div class="container-imgsmall">
+                                    <img class='header-line3-img10' src="{% static 'chipi/images/Heart.svg' %}" alt="image">
+                                      {% if user.is_buyer %}
+                                      {% if favr == 0 %}
+                                      <a href="{% url 'add_fav' product_id=product.id %}"><p class="a10">Добавить в избранное</p></a>
+                                      {% else %}
+                                      <a href="{% url 'rem_fav' product_id=product.id %}"><p class="a10">Удалить из избранного</p></a>
+                                      {% endif %}
+                                      {% else %}
+                                      <a href="{% url 'users:login' %}"><p class="a10">Добавить в избранное</p></a>
+                                      {% endif %}
+                                  </div>
+                            </div>
+                            <div class="container-text11">
+                                {% if product.count != 0 %}
+                                <p class="a10">Наличие: {{ product.count }}</p>
+                                {% else %}
+                                <p class="a10">НЕТ В НАЛИЧИИ</p>
+                                {% endif %}
+
+                            </div>
+
+                         <div class="container-color2">
+<!--                                <p class="a10">Цвет: черный</p>-->
+<!--&lt;!&ndash;                                <img class='header-line3-img11' src="/фото1/Color.svg" alt="image">&ndash;&gt;-->
+<!--                                <p class="a10" style="color: #191C1F;">Встроенная память:</p>-->
+                                <div class="container-text11">
+                        <div>
+                            <p class="a11">Описание:</p>
+
+                            <p class="a11" style="margin-bottom: 15px;">{{ product.description }}</p>
+<!--                            <a8 style="color: #2DA5F3; margin-top: 15px; margin-left: 29px; margin-top: 13px;">Перейти к описанию</a8>-->
+                        </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="container-button-in-kup">
+                            <button15 style="line-height: 35px;">
+                                <div class="container-button-in-kup3">
+                                    <p15>85069₽</p15>
+                                    <p17 style="color: #77878F; margin-top: 15px;text-decoration: line-through" ><p17>{{ product.price }}₽</p17></p17>
+                                </div>
+                                <div class="container-box" >
+                                    <img class='img-box' src="{% static 'chipi/images/Package1.svg' %}" alt="image">
+                                    <p16 style="color: black;">Доставка за сутки</p16>
+                                </div>
+                                <div class="container-box" >
+                                    <img class='img-box' src="{% static 'chipi/images/Package1.svg' %}" alt="image">
+                                    <p16 style="color: black;">Самовывоз сегодня</p16>
+                                </div>
+                                <div class="container-box" >
+                                    <img class='img-box' src="{% static 'chipi/images/Storefront.svg' %}" alt="image">
+                                    <a href="{{ product.shop.get_absolute_url }}"><p16 style="color: #DE732D;">{{ product.shop.name }}</p></a>
+                                </div>
+                                <div class="container-button-in-kup2">
+    `                               {% if user.is_buyer %}
+
+                                      <a href="{% url 'cart_add' product_id=product.id %}">
+                                    <button17 style="font-size: 14px; line-height: 48px;background-color: #77878F;">
+                                        <p10 style="color: white;">В корзину</p10>
+                                    </button17>
+
+                                    <a href="{% url 'cart_add' product_id=product.id %}">
+                                    <button17 style="font-size: 14px; line-height: 48px; background-color: #57C150;">
+                                        <p10 style="color: white; ">Купить сейчас</p10>
+                                    </button17>
+                                    </a>
+
+                                      {% else %}
+                                    <a href="{% url 'users:login' %}">
+                                    <button17 style="font-size: 14px; line-height: 48px;background-color: #77878F;">
+                                        <p10 style="color: white;">В корзину</p10>
+                                    </button17>
+
+                                    <a href="{% url 'users:login' %}">
+                                    <button17 style="font-size: 14px; line-height: 48px; background-color: #57C150;">
+                                        <p10 style="color: white; ">Купить сейчас</p10>
+                                    </button17>
+                                    </a>
+                                      {% endif %}
+
+
+                                </div>
+                            </button15>
+                        </div>
+
+                    </div>
+                    <div class="container-button_kup">
+                        <div style="display: flex; flex-direction: column;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br><br><br><br>
+            {% if reviews %}
+
+            <div class="container-sort">
+                    <p25>Отзывы:</p25>
+<!--                <p25>Сортировать по:</p25>-->
+<!--                <p25 style="color: #2DB224;">дате</p25>-->
+<!--                <div class="star">-->
+<!--                    <p26>оценке</p26>-->
+<!--                    <img class="img-star" src="{% static 'chipi/images/Star.svg' %}" alt="star">-->
+<!--                </div>-->
+            </div>
+            <p class="t"></p>
+            <div>
+                <div class="container-button-otziv" >
+
+                        {% for r in reviews %}
+                    <button27 style="background-color: #F2F4F5; margin-bottom: 20px;">
+                        <div class="container-button-in-otziv">
+                            <p style="font-size: 20px; margin-top: 10px;line-height: 35px; margin-left: 15px;">{{ r.user.first_name }}</p>
+                            <p28>{{ r.time_created }}</p28>
+
+                            {% if r.score == 1 %}
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            {% elif r.score == 2 %}
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            {% elif r.score == 3 %}
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            {% elif r.score == 4 %}
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            {% elif r.score == 5 %}
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            <img class="img-gr-star" src="{% static 'chipi/images/Star 1.svg' %}" alt="image">
+                            {% endif %}
+                            {% if user.buyer == r.user %}
+                            <a class="img-gr-star" href="{% url 'rem_review' rev_id=r.id %}"><button>X</button></a>
+                            {% endif %}
+
+
+                        </div>
+                        <div class="container-box" style="margin-bottom: 15px; line-height: 35px;border: 1px solid #d3ffd0; width: 230px; background-color: #d3ffd0; border-radius: 15px; margin-top: -5px;">
+                            <p16 style="color: black; margin-left: 10px;">Товар куплен на Chipi-Chipi</p16>
+                        </div>
+                        <div style="display: flex; flex-direction: column; list-style: 1px;">
+                            <p27 style="color: #475156;line-height: 25px;">Внешний вид: {{ r.score }}</p27>
+                            <p27 style="color: #475156;line-height: 25px;">Функционал: {{ r.score }}</p27>
+                            <p27 style="color: #475156;line-height: 25px;">Качество: {{ r.score }}</p27>
+                            <p27 style="color: black; margin-bottom: 20px; width: 800px;line-height: 25px;margin-top: 15px;">{{ r.text }}</p27>
+                            <p27 style="color: #475156;line-height: 25px; margin-bottom: 5px;">Этот отзыв был полезен?</p27>
+                            <p27 style="color: #475156;line-height: 25px; margin-bottom: 15px;">Да 1           Нет 0</p27>
+                        </div>
+                    </button27>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+<p class="t"></p>
+                <div class="container-sort">
+                    <p25>Отзывов пока нет</p25>
+
+                </div>
+<p class="t"></p>
+            {% endif %}
+		</div>
+	</div>
+
+<br><br><br><br><br>
 
 {% endblock %}

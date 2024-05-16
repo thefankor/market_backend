@@ -76,6 +76,7 @@ class ReviewForm(forms.ModelForm):
 
 
 class EditOrderForm(forms.ModelForm):
+    track = forms.CharField(widget=forms.TextInput(attrs={'class': 'treck-input'}))
     class Meta:
         model = Order
         fields = ['status', 'track']

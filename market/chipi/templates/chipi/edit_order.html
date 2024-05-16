@@ -1,19 +1,44 @@
 {% extends 'base.html' %}
-<h1>Edit Order</h1>
+{% load static %}
 {% block content %}
-    {% if order.product.logo_image %}
-        <img src="{{ order.product.logo_image.url }}" width="200" >
-    {% endif %}
-    <h1> {{ order.title }} {{ order.count }} x {{ order.price }} RUB</h1>
+<link rel="stylesheet" href="{% static 'chipi/css/edit_order.css' %}">
+
+<div class="dostavka">
+        <img class="dostavka-img" src="{{ order.product.logo_image.url }}" alt="">
+        <p class="dostavka-p">{{ order.title }}</p>
+        <div class="dostavka-kolvo">
+            <p class="dostavka-kolvo-p1">{{ order.count }} x </p>
+            <p class="dostavka-kolvo-p2">{{ order.price }}</p>
+            <img class="dostavka-kolvo-img" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+        </div>
+
     <form action="" method="post">
         {% csrf_token %}
         <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">SEND</button></p>
+        <div class="kategory">
+            <p class="kategory-p">Категории</p>
+            {{ form.status }}
+            {{ form.status.errors }}
+        </div>
+        <div class="treck">
+            <p class="treck-p">Трек-номер</p>
+<!--            <input class="treck-input" type="number">-->
+            {{ form.track }}
+            {{ form.track.errors }}
+        </div>
+
+        <div class="uppload2">
+            <button class="uppload-btn" type="submit">
+                <p class="uppload-p">ОТПРАВИТЬ</p>
+            </button>
+        </div>
     </form>
-    <p>{{ order.time_created }}</p>
-    <p>Product <a href="{% url 'product' order.product.id %}">{{ order.product.title }}</a></p>
+
+        <p class="zakaz-p">Заказ от {{ order.time_created }}</p>
+        <div class="tovar">
+            <p class="tovar-p">Товар:</p>
+            <a href="{{ order.product.get_absolute_url }}"><p class="tovar-p1">{{ order.product.title }}</p></a>
+        </div>
+    </div>
+
 {% endblock %}
