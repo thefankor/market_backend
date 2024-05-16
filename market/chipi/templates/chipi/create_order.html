@@ -1,32 +1,146 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>order:</h1>
-    {% for p in products %}
+<link rel="stylesheet" href="{% static 'chipi/css/create_order.css' %}">
+<div class="oplata">
 
-        <p><b>{{ p.count }} x {{ p.product.title }}</b></p>
-        <p style="color: grey">{{ p.product.price }}₽ / шт</p>
+        <div class="info">
+            <form action="" method="post">
+                {% csrf_token %}
+                <p class="info-p">Платежная информация</p>
+                {% if form.non_field_errors %}
+                <div class="account-p" style="color: #FF4242;">
+			        {{ form.non_field_errors }}
+		        </div>
+                {% endif %}
+                <div class="info-name">
+                    <div class="first-name">
+                        <p class="first-name-p">Имя</p>
+<!--                        <input class="first-name-input" type="text">-->
+                        {{ form.first_name }}
+                            <p class="first-name-p">{{ form.first_name.errors }}</p>
+                    </div>
+                    <div class="last-name">
+                        <p class="last-name-p">Фамилия</p>
+<!--                        <input class="last-name-input" type="text">-->
+                        {{ form.last_name }}
+                            <p class="last-name-p">{{ form.last_name.errors }}</p>
+                    </div>
+                    <div class="middle-name">
+                        <p class="middle-name-p">Отчество</p>
+<!--                        <input class="middle-name-input" type="text">-->
+                        {{ form.middle_name }}
+                            <p class="middle-name-p">{{ form.middle_name.errors }}</p>
+                    </div>
+                </div>
+                <div class="info-adress">
+                    <p class="adress-p">Адрес</p>
+<!--                    <input class="adress-input" type="text">-->
+                    {{ form.addr }}
+                            <p class="adress-p">{{ form.addr.errors }}</p>
+                </div>
+                <div class="info-mesto">
+                    <div class="land">
+                        <p class="land-p">Страна</p>
+<!--                        <input class="land-input" type="text">-->
+                        {{ form.country }}
+                            <p class="land-p">{{ form.country.errors }}</p>
+                    </div>
+                    <div class="region">
+                        <p class="region-p">Регион</p>
+<!--                        <input class="region-input" type="text">-->
+                        {{ form.region }}
+                            <p class="region-p">{{ form.region.errors }}</p>
+                    </div>
+                    <div class="city">
+                        <p class="city-p">Город</p>
+<!--                        <input class="city-input" type="text">-->
+                        {{ form.city }}
+                            <p class="city-p">{{ form.city.errors }}</p>
+                    </div>
+                </div>
+                <div class="private-info">
+                    <div class="email">
+                        <p class="email-p">Email</p>
+<!--                        <input class="email-input" type="email">-->
+                        {{ form.email }}
+                            <p class="email-p">{{ form.email.errors }}</p>
+                    </div>
+                    <div class="phone">
+                        <p class="phone-p">Номер телефона</p>
+<!--                        <input class="phone-input" type="text">-->
+                        {{ form.phone }}
+                            <p class="phone-p">{{ form.phone.errors }}</p>
+                    </div>
+                    <div class="index">
+                        <p class="index-p">Индекс</p>
+<!--                        <input class="index-input" type="number">-->
+                        {{ form.index }}
+                            <p class="index-p">{{ form.index.errors }}</p>
+                    </div>
+
+                </div>
+                <div class="save">
+                    <button class="save-btn" type="submit">
+                        <p class="save-p">СОХРАНИТЬ</p>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="cart">
+            <p class="cart-p">Корзина</p>
+            {% for p in products %}
+            <div class="tovar">
+                <img class="tovar-img" src="{{ p.product.logo_image.url }}" alt="">
+                <div class="tovar-p">
+                    <p class="tovar-p1">{{ p.product.title }}</p>
+                    <div class="tovar-price">
+                        <p class="tovar-price-p1">{{ p.count }}</p>
+                        <p class="tovar-price-p2">x</p>
+                        <p class="tovar-price-p3">{{ p.product.price }}</p>
+                        <img class="tovar-price-img" src="{% static 'chipi/images/icons8-рубль-24.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="cart-right">
+                <div class="cart-right-12">
+                    <p class="cart-right-12-p1">Итоговая цена</p>
+                    <div class="cart-right-12-p2-img">
+                        <p class="cart-right-12-p2">{{ total_sum }}</p>
+                        <img class="cart-right-12-img" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="cart-right-12">
+                    <p class="cart-right-12-p1">Доставка</p>
+                    <p class="cart-right-12-p3">Бесплатно</p>
+                </div>
+                <p class="poloska"></p>
+                <div class="cart-right-12">
+                    <p class="cart-right-12-p4">Итого</p>
+                    <div class="cart-right-12-p2-img">
+                        <p class="cart-right-12-p2">{{ total_sum }}</p>
+                        <img class="cart-right-12-img" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                    </div>
+                </div>
+                <div class="cart-right-12-btn">
+                    <a href="{% url 'pay_order' %}">
+                        <button class="cart-right-12-btn1">
+                            <p class="cart-right-12-btn-p">ОПЛАТИТЬ</p>
+                            <img class="cart-right-12-btn-img" src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-    {% if not forloop.last %}
-    <hr>
-    {% endif %}
-    {% endfor %}
-    <hr>
-    <h2>Total amount: {{ total_sum }}₽</h2>
-<br>
-<hr>
-    <form action="" method="post">
-        {% csrf_token %}
-         <input type="hidden" name="next" value="{{ next }}">
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">Save</button></p>
-    </form>
-<br>
-    <a href="{% url 'pay_order' %} "><button>Next</button></a>
-<br><br><br><br><br>
+
+
+
+
+
 {% endblock %}

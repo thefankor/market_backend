@@ -1286,3 +1286,17 @@ body {
         margin-left: 0px;
     }
 }
+
+
+.shop {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.shop-p {
+    letter-spacing: 2px;
+    color: #5ecf56;
+    font-size: 22px;
+    font-weight: 600;
+}

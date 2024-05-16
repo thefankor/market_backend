@@ -1,14 +1,73 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-    <form action="" method="post" enctype="multipart/form-data">
+<link rel="stylesheet" href="{% static 'chipi/css/addprod.css' %}">
+
+
+<form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <input type="file" name = "files" multiple accept="image/*" />
-        <p><button type="submit">SEND</button></p>
-    </form>
+    <p class="upp">Добавление товара</p>
+     <div class="account-p" style="color: #FF4242;">
+			{{ form.non_field_errors }}
+		</div>
+        <div class="uppload">
+            <div class="uppload1">
+                <div class="name">
+                    <p class="name-p">Название</p>
+<!--                    <textarea class="name-input" name="opisanie"></textarea>-->
+                    {{ form.title }}
+                    <p class="name-p">{{ p.title.errors }}</p>
+                </div>
+                <div class="price">
+                    <p class="price-p">Цена</p>
+<!--                    <input class="price-input" type="number">-->
+                    {{ form.price }}
+                    <p class="price-p">{{ form.price.errors }}</p>
+                </div>
+            </div>
+            <div class="uppload1">
+                <div class="opisanie">
+                    <p class="opisanie-p">Описание</p>
+<!--                    <textarea class="opisanie-input" name="opisanie"></textarea>-->
+                        {{ form.description }}
+                    <p class="opisanie-p">{{ form.description.errors }}</p>
+                </div>
+                <div class="kolvo">
+                    <p class="kolvo-p">Количество в наличии</p>
+<!--                    <input class="kolvo-input" type="number">-->
+                    {{ form.count }}
+                    <p class="kolvo-p">{{ form.count.errors }}</p>
+                </div>
+            </div>
+            <div class="uppload1">
+                <div class="kategory">
+                    <p class="kategory-p">Категории</p>
+                    {{ form.prodcategory }}
+                    <p class="kategory-p">{{ form.prodcategory.errors }}</p>
+                </div>
+            </div>
+            <div class="uppload1">
+                <div class="ava">
+                    <p class="ava-p">Изображение</p>
+<!--                    <input type="file">-->
+                    {{ form.logo_image }}
+                    <p class="kategory-p">{{ form.logo_image.errors }}</p>
+                </div>
+            </div>
+            <div class="uppload1">
+                <div class="foto">
+                    <p class="foto-p">Фото</p>
+                    <input type="file" name = "files" multiple accept="image/*" />
+                </div>
+            </div>
+            <div class="uppload2">
+                <button class="uppload-btn" type="submit">
+                    <p class="uppload-p">ДОБАВИТЬ</p>
+                </button>
+            </div>
+        </div>
+</form>
+
 {% endblock %}

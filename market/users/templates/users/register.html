@@ -65,7 +65,7 @@
 <!--                <input class='parol-password' id="password-1" placeholder="Минимум 8 символов" type="password">-->
                     {{ form.password1 }}
 <!--                    <p class="account-p1">{{ form.password1.errors }}</p>-->
-                <button class="parol-button" id="parol-1">
+                <button type="button" class="parol-button" id="parol-1">
                     <img src="{% static 'chipi/images/Eye.svg' %}" alt="eye">
                 </button>
             </div>
@@ -83,7 +83,7 @@
 <!--                <input class='parol-password' id="password-2" placeholder="Минимум 8 символов" type="password">-->
                     {{ form.password2 }}
 <!--                    <p class="account-p1">{{ form.password2.errors }}</p>-->
-                <button class="parol-button" id="parol-2">
+                <button type="button" class="parol-button" id="parol-2">
                     <img src="{% static 'chipi/images/Eye.svg' %}" alt="eye">
                 </button>
             </div>
@@ -117,4 +117,5 @@
 	{% csrf_token %}
 	<input type="hidden" name="next" value="{{ next }}">
 </form>
+<script src="{% static 'chipi/js/reg.js' %}"></script>
 {% endblock %}

@@ -29,6 +29,9 @@ urlpatterns = [
     path('s/', views.search, name='search'),
     path('rem_review/<int:rev_id>/', views.rem_review, name='rem_review'),
     path('edit_order/<int:order_id>/', views.edit_order, name='edit_order'),
+    path('help/', views.help_page, name='help'),
+    path('support/', views.support_page, name='support'),
+    path('ord/<int:ord_id>/', views.show_order, name='show_order'),
 
 
 ]

@@ -1,16 +1,83 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-    <h1>ORDERS SHOP</h1>
-    {% for order in orders %}
-    <p><a href="{% url 'edit_order' order.id %}">{{ order.title }}</a></p>
-    <p>{{ order.count }} x {{ order.price }} RUB</p>
+<link rel="stylesheet" href="{% static 'chipi/css/order.css' %}">
 
-    <p>Status: {{ order.get_status_display }}</p>
 
-    <p>{{ order.time_created }}</p>
-<hr>
-    {% endfor %}
+<div>
+		<link rel="stylesheet" href="style-history.css">
+        <div class="t">
+            <div class="panel">
+                <div class="panel-1">
+                    <img class="panel-1-img" src="{% static 'chipi/images/Storefront1.svg' %}" alt="2">
+                    <a href="{% url 'orders' %}"><p class="panel-1-p">История заказов</p></a>
+                </div>
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/Notebook1.svg' %}" alt="7">
+                    <a href="{% url 'users:address' %}"><p class="panel-2-p">Карты и адреса</p></a>
+                </div>
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/Stack1.svg' %}" alt="1">
+                    <a href="{% url 'users:profile' %}"><p class="panel-2-p">Аккаунт</p></a>
+                </div>
 
-<br><br><br><br><br>
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/ShoppingCartSimple1.svg' %}" alt="4">
+                    <a href="{% url 'cart' %}"><p class="panel-2-p">Корзина</p></a>
+                </div>
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/Heart1.svg' %}" alt="5">
+                    <a href="{% url 'favorites' %}"><p class="panel-2-p">Список желаний</p></a>
+                </div>
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/ArrowsCounterClockwise1.svg' %}" alt="6">
+                    <a href="{% url 'users:password_change' %}"><p class="panel-2-p">Сменить пароль</p></a>
+                </div>
+
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/Gear1.svg' %}" alt="8">
+                    <a href="{% url 'users:profile' %}"><p class="panel-2-p">Настройки</p></a>
+                </div>
+                <div class="panel-2">
+                    <img class="panel-2-img" src="{% static 'chipi/images/SignOut1.svg' %}" alt="9">
+                    <a href="{% url 'users:logout' %}"><p class="panel-2-p">Выйти из аккаунта</p></a>
+                </div>
+            </div>
+            <div>
+                <table class="table2">
+                    <thead>
+                        <tr>
+                          <th>Заказ</th>
+                          <th>Статус</th>
+                          <th>Дата</th>
+                          <th>Цена</th>
+                          <th>Детали</th>
+                        </tr>
+                {% for order in orders %}
+                    <tr>
+                        <td style="color: #000; ">{{ order.title|truncatechars:20 }}</td>
+                        {% if order.get_status_display == 'Доставлен' %}
+                        <td style="color: #2DB224;">{{ order.get_status_display|upper }}</td>
+                        {% elif order.get_status_display == 'Ожидает выдачи' %}
+                        <td style="color: #2DB224;">{{ order.get_status_display|upper }}</td>
+                        {% elif order.get_status_display == 'Отменен' %}
+                        <td style="color: #EE5858;">{{ order.get_status_display|upper }}</td>
+                        {% else %}
+                        <td style="color: #FA8232;">{{ order.get_status_display|upper }}</td>
+                        {% endif %}
+
+                        <td>{{ order.time_updated }}</td>
+                        <td> {{ order.count }} x {{ order.price }} ₽</td>
+                        <td style="color: #2DA5F3;"><a style="color: #2DA5F3;" href="{% url 'edit_order' order.id %}">Посмотреть детали</a><img class='img-mini' src="{% static 'chipi/images/image-next-blue.png' %}" alt="image"></td>
+
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+	</div>
+<br><br><br>
+
 {% endblock %}

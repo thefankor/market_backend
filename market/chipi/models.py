@@ -16,7 +16,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.PositiveIntegerField()
     count = models.PositiveIntegerField(default=0)
-    category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products', blank=True)
+    # category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products', blank=True)
     prodcategory = models.ForeignKey('ProdCategory', on_delete=models.PROTECT, related_name='products', null=True)
     shop = models.ForeignKey('Shop', on_delete=models.PROTECT, related_name='products')
     time_created = models.DateTimeField(auto_now_add=True)
@@ -139,6 +139,7 @@ class Order(models.Model):
         TRANSIT = 3, 'В пути'
         WAITING = 4, 'Ожидает выдачи'
         DELIVERED = 5, 'Доставлен'
+        CANCELED = 10, 'Отменен'
     '''+ address'''
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='orders')
     shop = models.ForeignKey(Shop, on_delete=models.SET_NULL, related_name='orders', null=True)
@@ -146,7 +147,8 @@ class Order(models.Model):
     count = models.PositiveIntegerField()
     price = models.PositiveBigIntegerField()
     time_created = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(choices=Status.choices, default=Status.CREATED)
+    time_updated = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(choices=Status.choices, default=Status.PAID_FOR)
     title = models.CharField(max_length=255)
     track = models.CharField(blank=True)
 

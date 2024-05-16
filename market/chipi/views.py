@@ -115,8 +115,44 @@ def show_product(request, product_id):
 
 def show_shop(request, seller_id):
     shop = get_object_or_404(Shop, pk=seller_id)
-    products = Product.objects.filter(shop_id=shop.pk)
-    return render(request, 'chipi/shop.html', context={"prod": products, "shop": shop})
+    search_query = request.GET.get('q')
+
+    # products = Product.objects.filter(is_published=1)
+    if request.user.is_authenticated and request.user.is_buyer:
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        for cart in carts:
+            if cart.product.count == 0:
+                cart.delete()
+            elif cart.count > cart.product.count:
+                cart.count = cart.product.count
+                cart.save()
+
+        fav_prod = Product.objects.filter(favorite__user=request.user.buyer)
+        if search_query == None:
+            products = Product.objects.filter(shop=shop).annotate(mark=Avg('reviews__score')).order_by('id').select_related(
+                'shop').annotate(
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+        else:
+
+            products = Product.objects.filter(shop=shop).filter(title__icontains=search_query).annotate(
+                mark=Avg('reviews__score')).order_by('id').select_related(
+                'shop').annotate(
+                count_in_cart=Min('cart__count', filter=Q(cart__user=request.user.buyer)))
+
+
+    else:
+        fav_prod = []
+        products = Product.objects.filter(shop=shop).annotate(mark=Avg('reviews__score')).order_by('id').select_related('shop')
+
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    # return render(request, 'chipi/index_with_score.html', context={"prod": products, "fav_prod": fav_prod})
+    # return render(request, 'chipi/index3.html', context={"prod": products, "fav_prod": fav_prod,
+    #                                                      'search_text': search_query or ''})
+    return render(request, 'chipi/shop.html', context={"prod": page_obj, "fav_prod": fav_prod,
+                                                         'search_text': search_query or '', 'shop': shop})
+
 
 # @login_required
 
@@ -229,55 +265,55 @@ def show_cart(request):
 
 
 def create_order(request):
-    try:
-        if request.user.is_buyer:
-            user = request.user
-            indata = {
-                'phone': user.buyer.phone,
-                'email': user.buyer.email,
-                'last_name': user.buyer.last_name,
-                'first_name': user.buyer.first_name,
-                'middle_name': user.buyer.middle_name,
-            }
-            if user.buyer.correct_address:
-                form = AddressForm(instance=user.buyer.correct_address)
-            else:
-                form = AddressForm(initial=indata)
-            if request.method == 'POST':
-                form = AddressForm(request.POST)
-                if form.is_valid():
-                    try:
-                        if not user.buyer.correct_address:
-                            a = Address.objects.create(**form.cleaned_data, user=user.buyer)
-                            u = user.buyer
-                            u.correct_address = a
-                            u.save()
-                        else:
-                            adr = user.buyer.correct_address.id
-                            Address.objects.filter(pk=adr).update(**form.cleaned_data)
-                        return redirect('create_order')
-                    except:
-                        form.add_error(None, 'Ошибка добавления хз')
-                    # return redirect(reverse_lazy('order'))
-
-            carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
-            if len(carts) == 0:
-                return redirect('home')
-            else:
-                total_count = sum(cart.count for cart in carts)
-                total_sum = sum(cart.sum() for cart in carts)
-                data = {
-                    'products': carts,
-                    'total_count': total_count,
-                    'total_sum': total_sum,
-                    'form': form,
-                }
-                return render(request, 'chipi/create_order.html', context=data)
-        elif request.user.is_shop:
-            return HttpResponseNotFound('<h1>Оформление заказа недоступно в режиме магазина</h1>')
+    # try:
+    if request.user.is_buyer:
+        user = request.user
+        indata = {
+            'phone': user.buyer.phone,
+            'email': user.buyer.email,
+            'last_name': user.buyer.last_name,
+            'first_name': user.buyer.first_name,
+            'middle_name': user.buyer.middle_name,
+        }
+        if user.buyer.correct_address:
+            form = AddressForm(instance=user.buyer.correct_address)
         else:
-            return redirect('users:login')
-    except:
+            form = AddressForm(initial=indata)
+        if request.method == 'POST':
+            form = AddressForm(request.POST)
+            if form.is_valid():
+                try:
+                    if not user.buyer.correct_address:
+                        a = Address.objects.create(**form.cleaned_data, user=user.buyer)
+                        u = user.buyer
+                        u.correct_address = a
+                        u.save()
+                    else:
+                        adr = user.buyer.correct_address.id
+                        Address.objects.filter(pk=adr).update(**form.cleaned_data)
+                    return redirect('create_order')
+                except:
+                    form.add_error(None, 'Ошибка добавления хз')
+                # return redirect(reverse_lazy('order'))
+
+        carts = Cart.objects.filter(user=request.user.buyer).order_by('-time_created')
+        if len(carts) == 0:
+            return redirect('home')
+        else:
+            total_count = sum(cart.count for cart in carts)
+            total_sum = sum(cart.sum() for cart in carts)
+            data = {
+                'products': carts,
+                'total_count': total_count,
+                'total_sum': total_sum,
+                'form': form,
+            }
+            return render(request, 'chipi/create_order.html', context=data)
+    elif request.user.is_shop:
+        return HttpResponseNotFound('<h1>Оформление заказа недоступно в режиме магазина</h1>')
+    else:
+        return redirect('users:login')
+    # except:
         return redirect('users:login')
 
 
@@ -606,3 +642,25 @@ def edit_order(request, order_id):
             return redirect(reverse_lazy('edit_order', kwargs={'order_id': order_id}))
 
     return render(request, 'chipi/edit_order.html', {'form': form, 'order': order})
+
+
+def help_page(request):
+    return render(request, 'chipi/help.html')
+
+
+def support_page(request):
+    return render(request, 'chipi/support.html')
+
+
+def show_order(request, ord_id):
+    order = get_object_or_404(Order, pk=ord_id)
+    if not request.user.is_authenticated:
+        return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+    else:
+        user = request.user
+        if not user.is_buyer:
+            return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+        if user.buyer != order.user:
+            return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+    return render(request, 'chipi/ord.html', { 'order': order, 'total': order.price*order.count, })

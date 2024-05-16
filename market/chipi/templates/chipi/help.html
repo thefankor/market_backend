@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'chipi/css/help.css' %}">
+
+<div class="help">
+        <div class="help-right">
+            <p class="help-right-p1">Часто задаваемые вопросы (F.A.Q.)</p>
+            <div class="help-right-v1">
+                <p class="help-right-v1-p1">Как сделать возврат</p>
+                <button id ='toggleButton'>
+                    <img class="help-right-v1-img1" src="{% static 'chipi/images/Plus.svg' %}" alt="">
+                </button>
+            </div>
+            <div id='hiddenText'>
+                <div class="hiddenText-1">
+                    <p class="hiddenText-1-p1">Если вы недавно оформили заказ, и он еще не поступил в сборку, <br>вы можете отменить заказ.</p>
+                    <button id="toggleButton1">
+                        <img class="hiddenText-1-img1" src="{% static 'chipi/images/Minus.svg' %}" alt="">
+                    </button>
+                </div>
+                <div class="hiddenText-2">
+                    <p class="hiddenText-2-p1">Если вы недавно оформили заказ и он ещё не поступил в сборку, вы можете отменить заказ, либо отказаться от товара при получении.</p>
+                    <p class="hiddenText-2-p2">Вы можете вернуть заказ только в статусе «Получен», и если он подлежит возврату.</p>
+                    <p class="hiddenText-2-p3">Чтобы вернуть товар:</p>
+                    <p class="hiddenText-2-p4">1. Перейдите в раздел Заказы и нажмите на номер заказа. Нажмите Вернуть товары и выберите те, которые хотите вернуть.</p>
+                    <p class="hiddenText-2-p4">2. В личном кабинете перейдите на вкладку Мои возвраты, выберите товары, которые хотите вернуть, и нажмите Перейти к возврату.</p>
+                    <p class="hiddenText-2-p2">Выберите причину возврата и нажмите Оформить возврат.</p>
+                    <p class="hiddenText-2-p2">Если заявку на возврат одобрят, выберите способ возврата:</p>
+                    <p class="hiddenText-2-p4">1. Если товар доставлял Chipi-Chipi, выберите доступный пункт выдачи заказов.</p>
+                    <p class="hiddenText-2-p4">2. Если товар доставлял продавец, следуйте инструкции по возврату товара продавцу.</p>
+                </div>
+            </div>
+            <div class="help-right-v2">
+                <p class="help-right-v2-p1">Ошибка при оплате</p>
+                <button id ='toggleButton2'>
+                    <img class="help-right-v1-img1" src="{% static 'chipi/images/Plus.svg' %}" alt="">
+                </button>
+            </div>
+            <div id="hiddenText1">
+                <div class="hiddenText1-1">
+                    <p class="hiddenText1-1-p1">Руководство при ошибке оплаты на сайте</p>
+                    <button id="toggleButton3">
+                        <img class="hiddenText1-1-img1" src="{% static 'chipi/images/Minus.svg' %}" alt="">
+                    </button>
+                </div>
+                <div class="hiddenText1-2">
+                    <p class="hiddenText1-2-p1">1. Убедитесь, что у вас есть доступ к интернету. Проверьте подключение к сети и перезагрузите роутер, если это возможно.</p>
+                    <p class="hiddenText1-2-p1">2. Проверьте, правильно ли вы ввели данные карты. Убедитесь, что срок действия вашей карты и CVV-код введены верно.</p>
+                    <p class="hiddenText1-2-p1">3. Убедитесь, что на вашей карте достаточно средств для оплаты. Проверьте свой банковский счет или свяжитесь с вашим банком для получения дополнительной информации.</p>
+                    <p class="hiddenText1-2-p1">4. Убедитесь, что ваш банк разрешает онлайн-транзакции. Некоторые банки могут блокировать или ограничивать онлайн-платежи из соображений безопасности. Свяжитесь с вашим банком, чтобы уточнить эту информацию.</p>
+                    <p class="hiddenText1-2-p1">5. Проверьте настройки безопасности вашего браузера. Иногда блокировки cookie или антивирусного программного обеспечения могут мешать успешному проведению транзакций.</p>
+                    <p class="hiddenText1-2-p1">6. Если ошибка оплаты все еще не устранена, обратитесь в службу поддержки вашего платежного шлюза или банка. Они могут помочь вам решить проблему или предоставить дополнительную информацию о том, как устранить ошибку оплаты.</p>
+                    <p class="hiddenText1-2-p1">7. Если все вышеуказанные действия не помогли, обратитесь к службе поддержки вашего сайта. Они могут предложить дополнительные решения или помочь вам разобраться с проблемой.</p>
+                </div>
+            </div>
+            <div class="help-right-v2">
+                <p class="help-right-v3-p1">Как посмотреть статус заказа</p>
+                <button id ='toggleButton4'>
+                    <img class="help-right-v1-img1" src="{% static 'chipi/images/Plus.svg' %}" alt="">
+                </button>
+            </div>
+            <div id="hiddenText2">
+                <div class="hiddenText2-1">
+                    <p class="hiddenText2-1-p1">Отслеживание заказа</p>
+                    <button id="toggleButton5">
+                        <img class="hiddenText2-1-img1" src="{% static 'chipi/images/Minus.svg' %}" alt="">
+                    </button>
+                </div>
+                <div class="hiddenText2-2">
+                    <p class="hiddenText2-2-p1">Если заказ доставляется курьерской службой доставки, его можно отследить по трек-номеру на странице <a class='hiddenText2-2-a1' href="index-zakaz.html">Отследить заказ</a>. Он находится в личном кабинете в разделе Мои заказы.</p>
+                    <p class="hiddenText2-2-p2">Если заказ уже должны были доставить, но его ещё нет, обратитесь в <a a class='hiddenText2-2-a2' href="index-podderzhka.html">Поддержку</a>.</p>
+                </div>
+            </div>
+            <div class="help-right-v2">
+                <p class="help-right-v4-p1">Примерка одежды и обуви</p>
+                <button id ='toggleButton6'>
+                    <img class="help-right-v1-img1" src="{% static 'chipi/images/Plus.svg' %}" alt="">
+                </button>
+            </div>
+            <div id="hiddenText3">
+                <div class="hiddenText3-1">
+                    <p class="hiddenText3-1-p1">Примерка одежды и обуви</p>
+                    <button id="toggleButton7">
+                        <img class="hiddenText2-1-img1" src="{% static 'chipi/images/Minus.svg' %}" alt="">
+                    </button>
+                </div>
+                <div class="hiddenText3-2">
+                    <p class="hiddenText3-2-p1">Вы можете заказать одежду и обувь в нескольких размерах, примерить их во время доставки и оставить только подходящие вещи, а остальные вернуть. Примерка возможна при доставке курьером Chipi-Chipi и в пункты выдачи, где есть примерочные.</p>
+                    <p class="hiddenText3-2-p2">Курьер</p>
+                    <p class="hiddenText3-2-p1">Если заказ доставляет курьер Chipi-Chipi, у вас будет 15 минут на примерку. Если сам продавец, другие транспортные компании или курьер партнёра — этого времени не будет.</p>
+                    <p class="hiddenText3-2-p2">Оплата заказа</p>
+                    <p class="hiddenText3-2-p1">Обязательного процента выкупа нет. Мы вернём деньги за те товары, от которых вы отказались. При отказе от всех товаров мы вернём вам деньги за заказ и доставку. В течение 10 дней мы перечислим деньги в банк — вы получите уведомление. Мы не можем повлиять на срок обработки платежа банком, так как деньги фактически у него. Обычно это занимает 2-3 дня. Если будет задержка, обратитесь в ваш банк. Если вы вернёте товар, купленный в рассрочку, лимит автоматически восстановится на сумму возврата.</p>
+                </div>
+            </div>
+            <div class="help-right-v2">
+                <p class="help-right-v5-p1">Способы оплаты</p>
+                <button id ='toggleButton8'>
+                    <img class="help-right-v1-img1" src="{% static 'chipi/images/Plus.svg' %}" alt="">
+                </button>
+            </div>
+            <div id="hiddenText4">
+                <div class="hiddenText4-1">
+                    <p class="hiddenText4-1-p1">Как можно оплатить заказ</p>
+                    <button id="toggleButton9">
+                        <img class="hiddenText2-1-img1" src="{% static 'chipi/images/Minus.svg' %}" alt="">
+                    </button>
+                </div>
+                <div class="hiddenText4-2">
+                    <p class="hiddenText4-2-p1">Во время оформления заказа вы увидите доступные способы оплаты для вашего заказа. Некоторые способы могут быть недоступны для выбранного региона или способа доставки.</p>
+                    <p class="hiddenText4-2-p1">Вы можете оплатить заказ несколькими способами одновременно. Например, банковской картой и баллами Chipi-Chipi. Или банковской картой и деньгами с баланса средств.</p>
+                    <p class="hiddenText4-2-p2">Способы оплаты:</p>
+                    <p class="hiddenText4-2-p3">1. Банковская карта <br> 2. Баланс средств <br> 3. Баллы Chipi-Chipi <br> 4. Наличные курьеру</p>
+                </div>
+            </div>
+        </div>
+        <div class="help-left">
+            <p class="help-left-p1">Не нашли ответ на свой вопрос?</p>
+            <p class="help-left-p2">Свяжитесь с нами</p>
+            <p class="help-left-p3">Если не смогли найти ответ на интересующий вас вопрос или у вас ещё остались какие-то вопросы, то свяжитесь с нами и мы вам поможем в ближайшее время</p>
+            <input type="email" placeholder="Email адрес" class="help-left-input1">
+            <input type="text" placeholder="Тема" class="help-left-input1">
+            <input type="text" placeholder="Сообщение..." class="help-left-input2">
+            <button class="help-left-btn">
+                <p class="help-left-btn-p">ОТПРАВИТЬ СООБЩЕНИЕ</p>
+                <img class="help-left-btn-img" src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+            </button>
+        </div>
+    </div>
+    <div class="bottom">
+<script src="{% static 'chipi/js/help.js' %}"></script>
+{% endblock %}

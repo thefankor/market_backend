@@ -14,9 +14,15 @@ from .models import Product, Category, Shop, ProductImage, Review, Order
 #
 
 class AddProdForm(forms.ModelForm):
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'name-input'}))
+    price = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'price-input'}))
+    count = forms.IntegerField(widget=forms.TextInput(attrs={'class': 'kolvo-input'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'opisanie-input'}))
+    # prodcategory = forms.MultipleChoiceField()
+    # logo_image = forms.ImageField(widget=forms.FileInput(attrs={'class': ''}))
     class Meta:
         model = Product
-        fields = ['title', 'price', 'count', 'description', 'prodcategory', 'logo_image', 'category']
+        fields = ['title', 'price', 'count', 'description', 'prodcategory', 'logo_image']
         labels = {
             'title': 'Название',
             'price': 'Цена',

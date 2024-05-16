@@ -28,8 +28,8 @@ class LoginUserForm(AuthenticationForm):
 
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'account-p-input',}))
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'parol-password',}))
-    password2 = forms.CharField(label='Password again', widget=forms.PasswordInput(attrs={'class': 'parol-password',}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'parol-password', 'id': 'password-1'}))
+    password2 = forms.CharField(label='Password again', widget=forms.PasswordInput(attrs={'class': 'parol-password', 'id': 'password-2'}))
     phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'account-p-input',}))
     email = forms.CharField(label='Email', widget=forms.TextInput(attrs={'class': 'account-p-input', }))
 
@@ -146,12 +146,12 @@ class UserPasswordChangeForm(PasswordChangeForm):
 
 
 class RegisterShopForm(UserCreationForm):
-    username = forms.CharField(label='Login', widget=forms.TextInput())
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
-    password2 = forms.CharField(label='Password again', widget=forms.PasswordInput())
-    name = forms.CharField(label='Shop name', widget=forms.TextInput())
-    phone = forms.CharField(label='Phone')
-    email = forms.EmailField(label='shop email')
+    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'account-p-input'}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'parol-password', 'id': 'password-1'}))
+    password2 = forms.CharField(label='Password again', widget=forms.PasswordInput(attrs={'class': 'parol-password', 'id': 'password-2'}))
+    name = forms.CharField(label='Shop name', widget=forms.TextInput(attrs={'class': 'account-p-input'}))
+    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'account-p-input'}))
+    email = forms.EmailField(label='shop email', widget=forms.TextInput(attrs={'class': 'account-p-input'}))
 
     class Meta:
         model = get_user_model()
@@ -228,19 +228,19 @@ class ProfileShopForm(forms.ModelForm):
 
 
 class AddressForm(forms.ModelForm):
-    first_name = forms.CharField(label='first Name', widget=forms.TextInput(attrs={'class': 'adress-111-input', }))
-    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={'class': 'adress-112-input', }))
+    first_name = forms.CharField(label='first Name', widget=forms.TextInput(attrs={'class': 'adress-111-input first-name-input', }))
+    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={'class': 'adress-112-input last-name-input', }))
     middle_name = forms.CharField(label='Middle Name',
-                                  widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
-    addr = forms.CharField(label='Address', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
-    country = forms.CharField(label='Country', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
-    region = forms.CharField(label='Region', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
-    city = forms.CharField(label='City', widget=forms.TextInput(attrs={'class': 'adress-111-input', }))
-    index = forms.CharField(label='Index', widget=forms.TextInput(attrs={'class': 'adress-112-input', }))
+                                  widget=forms.TextInput(attrs={'class': 'adress-12-input middle-name-input', }))
+    addr = forms.CharField(label='Address', widget=forms.TextInput(attrs={'class': 'adress-12-input adress-input', }))
+    country = forms.CharField(label='Country', widget=forms.TextInput(attrs={'class': 'adress-12-input land-input', }))
+    region = forms.CharField(label='Region', widget=forms.TextInput(attrs={'class': 'adress-12-input region-input', }))
+    city = forms.CharField(label='City', widget=forms.TextInput(attrs={'class': 'adress-111-input city-input', }))
+    index = forms.CharField(label='Index', widget=forms.TextInput(attrs={'class': 'adress-112-input index-input', }))
     # adress-111-input
     # id = forms.IntegerField()
-    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
-    email = forms.CharField(label='EMail', widget=forms.TextInput(attrs={'class': 'adress-12-input', }))
+    phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'adress-12-input phone-input', }))
+    email = forms.CharField(label='EMail', widget=forms.TextInput(attrs={'class': 'adress-12-input email-input', }))
 
     # phone = forms.CharField()
 
@@ -290,6 +290,6 @@ class AddressForm(forms.ModelForm):
 
 
 class PaymentTestForm(forms.Form):
-    card_num = forms.CharField()
-    card_date = forms.CharField()
-    card_cvv = forms.CharField()
+    card_num = forms.CharField(widget=forms.TextInput(attrs={'class': 'nomer', 'placeholder': '1234 5678 9012 3456', 'id': 'cardNumber'}))
+    card_date = forms.CharField(widget=forms.TextInput(attrs={'class': 'data-input', 'placeholder': '12/24', 'id': 'cardData'}))
+    card_cvv = forms.CharField(widget=forms.TextInput(attrs={'class': 'cvv-input', 'placeholder': '156', 'id': 'cardCvv'}))

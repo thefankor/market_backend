@@ -39,7 +39,16 @@ class LoginUser(LoginView):
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy('users:login')
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password1']
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return response
+
 
 # def register(request):
 #     if request.method == 'POST':
@@ -151,7 +160,15 @@ class UserPasswordChange(PasswordChangeView):
 class RegisterShop(CreateView):
     form_class = RegisterShopForm
     template_name = 'users/shop_register.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('users:edit_shop')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password1']
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return response
 
 
 def address(request):

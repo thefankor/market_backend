@@ -3,7 +3,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'chipi/css/style-account-vhod.css' %}">
-<script src="{% static 'chipi/js/login.js' %}"></script>
+
 <div class="account">
 	<form action="" method="post">
         <div class="account-a">
@@ -31,14 +31,14 @@
             <div class="parol-p">
                 <p class="parol-p1">Пароль</p>
                 <a href="index-parol.html">
-                    <p class="parol-p2">Восстановить пароль</p>
+<!--                    <p class="parol-p2">Восстановить пароль</p>-->
                 </a>
             </div>
             <div class="parol-btn">
 <!--                <input class='parol-password' name="password" type="password" id="password">-->
 					{{ form.password }}
 					{{ form.password.errors }}
-                <button class="parol-button" id="parol">
+                <button type="button" class="parol-button" id="parol">
                     <img src="{% static 'chipi/images/Eye.svg' %}" alt="eye">
                 </button>
             </div>
@@ -53,4 +53,5 @@
 {% csrf_token %}
 <input type="hidden" name="next" value="{{ next }}">
 	</form>
+<script src="{% static 'chipi/js/login.js' %}"></script>
 {% endblock %}

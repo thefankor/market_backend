@@ -676,46 +676,4 @@ body {
     transition: 0.3s;
 }
 
-.buttons-btn3 {
-    width: 50px;
-    height: 50px;
-    background-color: #fff;
-    border-radius: 50%;
-    border: 2px solid #2DB224;
-    margin-right: 20px;
-    margin-left: 30px;
-}
 
-.cart {
-    margin-top: 20px;
-    display: flex;
-
-}
-.cart-btn {
-    display: flex;
-    align-items: center;
-    width: 179px;
-    background-color: #87d582;
-    padding: 5px 2px;
-    border-radius: 6px;
-}
-
-.cart-btn1 {
-    display: flex;
-    align-items: center;
-    margin-left: 70px;
-    width: 179px;
-    background-color: #87d582;
-    padding: 5px 2px;
-    border-radius: 6px;
-}
-
-.cart-btn:hover {
-    background-color: #4dc345;
-    transition: 0.5s;
-}
-
-.cart-btn1:hover {
-    background-color: #4dc345;
-    transition: 0.5s;
-}

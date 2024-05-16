@@ -75,14 +75,19 @@
 
                 </div>
             </div>
+	{% if user.is_authenticated %}
 	<img class='header-line3-img1' src="{% static 'chipi/images/MapPinLine.png' %}" alt="image">
-	<a class="header-line3-a1" href="index-zakaz.html">Отследить заказ</a>
+	<a class="header-line3-a1" href="{% url 'orders' %}">Отследить заказ</a>
+	{% else %}
+	<img class='header-line3-img1' src="{% static 'chipi/images/MapPinLine.png' %}" alt="image">
+	<a class="header-line3-a1" href="{% url 'users:login' %}">Отследить заказ</a>
+	{% endif %}
 	<img class='header-line3-img2' src="{% static 'chipi/images/Vector1.png' %}" alt="image">
-	<a class="header-line3-a2" href="index-podderzhka.html">Поддержка</a>
+	<a class="header-line3-a2" href="{% url 'support' %}">Поддержка</a>
 	<img class='header-line3-img3' src="{% static 'chipi/images/Info.png' %}" alt="image">
-	<a class="header-line3-a3" href="#">Нужна помощь</a>
+	<a class="header-line3-a3" href="{% url 'help' %}">Нужна помощь</a>
 	<img class='header-line3-img4' src="{% static 'chipi/images/PhoneCall.png' %}" alt="image">
-	<a class="header-line3-a4" href="#">Номера нет</a>
+	<a class="header-line3-a4" href="#">+79990009900</a>
 </div>
 <!--=======-->
 <!--    <div>-->

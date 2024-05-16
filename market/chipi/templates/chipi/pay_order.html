@@ -1,16 +1,58 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-<h1>Оплата</h1>
-    <h4>{{ total_count }} товаров на {{ total_sum }} RUB</h4>
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-        <div class="form-error">{{ form.non_field_errors }}</div>
-        {% for f in form %}
-            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div class="form-error">{{ f.errors }}</div>
-        {% endfor %}
-        <p><button type="submit">SEND</button></p>
-    </form>
+<link rel="stylesheet" href="{% static 'chipi/css/pay.css' %}" xmlns="http://www.w3.org/1999/html">
+
+
+<form action="" method="post">
+    {% csrf_token %}
+<div class="carta">
+
+        <p class="nomer-p">Номер карты</p>
+<!--        <input id="cardNumber" class="nomer" type="text" placeholder="1234 5678 9012 3456">-->
+                {{ form.card_num }}
+                {{ form.card_num.errors }}
+        <div class="dannie">
+            <div class="data">
+                <p class="data-p">Месяц/год</p>
+<!--                <input class="data-input" id="cardData" type="text" placeholder="12/24">-->
+                {{ form.card_date }}
+                {{ form.card_date.errors }}
+            </div>
+            <div class="cvv">
+                <p class="cvv-p">CVC</p>
+<!--                <input class="cvv-input" id='cardCvv' type="number" placeholder="156">-->
+                {{ form.card_cvv }}
+                {{ form.card_cvv.errors }}
+            </div>
+        </div>
+    </div>
+    <div class="cart">
+        <div class="cart-right">
+            <div class="cart-right-12">
+                <p class="cart-right-12-p1">Количество</p>
+                <p class="cart-right-12-p3">{{ total_count }}</p>
+            </div>
+            <div class="cart-right-12">
+                <p class="cart-right-12-p4">Итого</p>
+                <div class="cart-right-12-p2-img">
+                    <p class="cart-right-12-p2">{{ total_sum }}</p>
+                    <img class="cart-right-12-img" src="{% static 'chipi/images/icons8-рубль-32.png' %}" alt="">
+                </div>
+            </div>
+            <div class="cart-right-12-btn">
+<!--                <a href="/html/index-pay.html">-->
+                    <button class="cart-right-12-btn1" type="submit">
+                        <p class="cart-right-12-btn-p">ОПЛАТИТЬ</p>
+                        <img class="cart-right-12-btn-img" src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+                    </button>
+<!--                </a>-->
+            </div>
+        </div>
+<script src="{% static 'chipi/js/pay.js' %}"></script>
+    </div>
+</form>
+
 {% endblock %}

@@ -3,6 +3,7 @@
 {% block content %}
 
 
+
         <div class="tovary">
             {% for p in prod %}
             <div class="tovar">
@@ -245,7 +246,7 @@
 <!--        </div>-->
 
 
-
+{% if prod.has_other_pages %}
         <div class="buttons">
             {% if prod.has_previous %}
             <a href="?page={{ prod.previous_page_number }}">
@@ -277,7 +278,7 @@
             </a>
         {% endif %}
             </div>
-
+{% endif %}
 <br><br>
 <!--        <div class="reklama">-->
 <!--            <img class='reklama-img' src="/фото/image 311.png" alt="">-->

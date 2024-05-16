@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'chipi/css/support.css' %}">
+
+<div class="vopros">
+        <div class="vopros1">
+            <p class="vopros1-p1">Есть какой-то вопрос?</p>
+            <p class="vopros1-p2">Напишите нам</p>
+            <p class="vopros1-p2">support@chipi-chipi.ru</p>
+<!--            <div class="vopros11">-->
+<!--                <img class='vopros1-img1' src="{% static 'chipi/images/MagnifyingGlass.svg' %}" alt="">-->
+<!--                <input class="vopros1-input" type="text" placeholder="Введите ваш вопрос">-->
+<!--                <div class="vopros111">-->
+<!--                    <button class='vopros1-btn' type="submit">-->
+<!--                        <p class="vopros1-p3">ПОДТВЕРДИТЬ</p>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+        <div class="vopros2">
+            <img class='vopros2-img1' src="{% static 'chipi/images/image 50.svg' %}" alt="">
+        </div>
+    </div>
+    <div class="hr"></div>
+    <div class="vopros3">
+        <p class="vopros3-p1">Как мы можем помочь вам сегодня?</p>
+    </div>
+    <div class="vopros4">
+        <div class="perenos">
+            <a href="{% url 'orders' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/Truck1.svg' %}" alt="">
+                    <p class="vopros4-p1">Отследить заказ</p>
+                </div>
+            </a>
+            <a href="{% url 'users:password_change' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/LockOpen.svg' %}" alt="">
+                    <p class="vopros4-p1">Поменять пароль</p>
+                </div>
+            </a>
+        </div>
+        <div class="perenos">
+            <a href="{% url 'users:address' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/CreditCard.svg' %}" alt="">
+                    <p class="vopros4-p1">Адресса</p>
+                </div>
+            </a>
+            <a href="{% url 'users:profile' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/User.svg' %}" alt="">
+                    <p class="vopros4-p1">Пользователь & аккаунт</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="vopros5">
+        <div class="perenos">
+            <a href="{% url 'favorites' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/Stack.svg' %}" alt="">
+                    <p class="vopros4-p1">Список желаний</p>
+                </div>
+            </a>
+            <a href="#">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/Notepad.svg' %}" alt="">
+                    <p class="vopros4-p1">Доставка</p>
+                </div>
+            </a>
+        </div>
+        <div class="perenos">
+            <a href="{% url 'cart' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/CreditCard.svg' %}" alt="">
+                    <p class="vopros4-p1">Корзина</p>
+                </div>
+            </a>
+            <a href="{% url 'users:shop_register' %}">
+                <div class="vopros4-1">
+                    <img class="vopros4-img1" src="{% static 'chipi/images/Storefront.svg' %}" alt="">
+                    <p class="vopros4-p1">Продавать на Chipi-Chipi</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="hr2"></div>
+<!--    <div class="vopros6">-->
+<!--        <p class="vopros6-p1">Популярные вопросы</p>-->
+<!--    </div>-->
+<!--    <div class="vopros7">-->
+<!--        <div class="vopros7-1">-->
+<!--            <ul>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Как мне вернуть товар?</a>-->
+<!--                </li>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Как сделать возврат?</a>-->
+<!--                </li>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Как долго длится процесс возврата?</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--        <div class="vopros7-1">-->
+<!--            <ul class="vopros7-ul">-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Каковы «сроки доставки»?</a>-->
+<!--                </li>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Как изменить способ оплаты?</a>-->
+<!--                </li>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="index-account-registration.html">Как создать новый аккаунт?</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--        <div class="vopros7-1">-->
+<!--            <ul>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Ошибка при оплате</a>-->
+<!--                </li>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Как получить заказ?</a>-->
+<!--                </li>-->
+<!--                <li class="vopros7-li">-->
+<!--                    <a class='vopros7-a' href="#">Почему мой заказ отменили?</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="vopros8">
+        <br>
+        <p class="vopros8-1-p1">Связь с нами</p>
+        <p class="vopros8-1-p2">Не нашли ответ на свой вопрос?<br>Свяжитесь с нами</p>
+        <div class="vopros8-2">
+            <div class="vopros8-2-1">
+                <div class="vopros8-2-11">
+                    <img class="vopros8-2-11-img" src="{% static 'chipi/images/Icon.svg' %}" alt="">
+                </div>
+                <div class="vopros8-2-12">
+                    <p class="vopros8-2-12-p1">Позвоните нам</p>
+                    <p class="vopros8-2-12-p2">+79990009900</p>
+                    <div class="vopros8-2-123-btn">
+                        <button class="vopros8-2-12-btn">
+                            <p class="vopros8-2-12-btn-p1">ПОЗВОНИТЬ НАМ</p>
+                            <img src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="vopros8-2-2">
+                <div class="vopros8-2-11">
+                    <img class="vopros8-2-11-img" src="{% static 'chipi/images/Icon1.svg' %}" alt="">
+                </div>
+                <div class="vopros8-2-12">
+                    <p class="vopros8-2-12-p1">Напишите нам</p>
+                    <p class="vopros8-2-12-p2">support@chipi-chipi.ru</p>
+                    <div class="vopros8-2-123-btn">
+                        <button class="vopros8-2-12-btn">
+                            <p class="vopros8-2-12-btn-p1">НАПИСАТЬ НАМ</p>
+                            <img src="{% static 'chipi/images/ArrowRight.png' %}" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

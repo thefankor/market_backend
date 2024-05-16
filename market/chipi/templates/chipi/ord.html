@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'chipi/css/ord.css' %}">
+
+<div class="history">
+        <div class="panel">
+             <div class="panel-1">
+                <img class="panel-1-img" src="{% static 'chipi/images/Storefront1.svg' %}" alt="2">
+                <a href="{% url 'orders' %}"><p class="panel-1-p">История заказов</p></a>
+            </div>
+
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Stack1.svg' %}" alt="1">
+                <a href="{% url 'users:profile' %}"><p class="panel-2-p">Аккаунт</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Notebook1.svg' %}" alt="7">
+                <a href="{% url 'users:address' %}"><p class="panel-2-p">Карты и адреса</p></a>
+            </div>
+
+
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Storefront1.svg' %}" alt="2">
+                <a href="{% url 'orders' %}"><p class="panel-2-p">История заказов</p></a>
+            </div>
+<!--            <div class="panel-2">-->
+<!--                <img class="panel-2-img" src="{% static 'chipi/images/MapPinLine1.svg' %}" alt="3">-->
+<!--                <a href="index-zakaz.html"><p class="panel-2-p">Отследить заказ</p></a>-->
+<!--            </div>-->
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/ShoppingCartSimple1.svg' %}" alt="4">
+                <a href="{% url 'cart' %}"><p class="panel-2-p">Корзина</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Heart1.svg' %}" alt="5">
+                <a href="{% url 'favorites' %}"><p class="panel-2-p">Список желаний</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/ArrowsCounterClockwise1.svg' %}" alt="6">
+                <a href="{% url 'users:password_change' %}"><p class="panel-2-p">Сменить пароль</p></a>
+            </div>
+
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/Gear1.svg' %}" alt="8">
+                <a href="{% url 'users:profile' %}"><p class="panel-2-p">Настройки</p></a>
+            </div>
+            <div class="panel-2">
+                <img class="panel-2-img" src="{% static 'chipi/images/SignOut1.svg' %}" alt="9">
+                <a href="{% url 'users:logout' %}"><p class="panel-2-p">Выйти из аккаунта</p></a>
+            </div>
+        </div>
+        <div class="zakaz">
+            <div class="zakaz1">
+                <a href="{% url 'orders' %}">
+                <button class="zakaz1-btn">
+                    <img class="zakaz1-img" src="{% static 'chipi/images/ArrowLeft1.svg' %}" alt="">
+                    <p class="zakaz1-p">ИСТОРИИ ЗАКАЗОВ</p>
+                </button>
+                </a>
+            </div>
+            <div class="zakaz2">
+                <div class="zakaz2-p">
+                    <p class="zakaz2-p1">{{ order.get_status_display }}</p>
+                    <div class="zakaz21">
+                        <p class="zakaz21-p">{{ order.count }} шт.</p>
+                        <p class="zakaz21-p1">Заказ от {{ order.time_created }}</p>
+                    </div>
+                </div>
+                <div class="zakaz22">
+                    <p class="zakaz22-p">{{ total }}</p>
+                    <img class="zakaz22-img" src="{% static 'chipi/images/icons8-рубль-синий.png' %}" alt="">
+                </div>
+            </div>
+            <div class="poloska">
+                <p class="poloska-p"></p>
+            </div>
+            <p class="zakaz-p">История заказа</p>
+
+
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/Notebook111.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ создан</p>
+                    <p class="zakaz3-p2">{{ order.time_created }}</p>
+                </div>
+            </div>
+            {% if order.get_status_display == 'Оплачен' %}
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ успешно оплачен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            {% elif order.get_status_display == 'В сборке' %}
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ успешно оплачен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в сборке</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            {% elif order.get_status_display == 'В пути' %}
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ успешно оплачен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в сборке</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/Package.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в пути</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            {% elif order.get_status_display == 'Ожидает выдачи' %}
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ успешно оплачен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в сборке</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/Package.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в пути</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/MapPinLine.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ прибыл в пункт выдачи</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            {% elif order.get_status_display == 'Доставлен' %}
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ успешно оплачен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/CheckCircle.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в сборке</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/Package.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ в пути</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/MapPinLine.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ прибыл в пункт выдачи</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/Notepad.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Заказ получен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            {% elif order.get_status_display == 'Отменен' %}
+            <div class="zakaz3">
+                <div class="zakaz3-fon">
+                    <img class="zakaz3-img" src="{% static 'chipi/images/Notebook111.svg' %}" alt="">
+                </div>
+                <div class="zakaz3-p">
+                    <p class="zakaz3-p1">Ваш заказ отменен</p>
+                    <p class="zakaz3-p2">{{ order.time_updated }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+
+
+            <div class="poloska">
+                <p class="poloska-p"></p>
+            </div>
+            <p class="zakaz-p1">Товары</p>
+            <div class="cart">
+                <div class="cart-up">
+                    <p class="cart-up-p">ТОВАРЫ</p>
+                </div>
+
+                <div class="cart-in">
+                    <img class="cart-in-img" src="{{ order.product.logo_image.url }}" alt="">
+                    <div class="cart-in1">
+                        <p class="cart-in1-p">{{ order.product.prodcategory }}</p>
+                        <a href="{{ order.product.get_absolute_url }}"><p class="cart-in1-p1">{{ order.title }}</p></a>
+                    </div>
+                    <div class="cart-in2">
+                        <p class="cart-in2-p">{{ order.count }} x </p>
+                        <p class="cart-in2-p">{{ order.price }}</p>
+                        <img class="cart-in2-img" src="{% static 'chipi/images/icons8-рубль-серый.png' %}" alt="">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
